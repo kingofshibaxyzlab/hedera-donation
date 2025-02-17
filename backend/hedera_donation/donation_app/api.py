@@ -437,7 +437,7 @@ def get_top_donors(request):
 # Upload file
 @api.post("/upload-file", tags=["File Management"])
 def upload_file(request, file: NinjaUploadedFile = File(...)):
-    DOMAIN_ROOT = "/api/read-file"
+    DOMAIN_ROOT = settings.DOMAIN_ROOT
     try:
         # Generate a unique file name
         file_extension = os.path.splitext(file.name)[1]

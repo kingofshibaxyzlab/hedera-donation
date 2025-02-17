@@ -39,8 +39,8 @@ const HashConnectContext = createContext<HashConnectContextType | undefined>(
 const appMetadata: HashConnectTypes.AppMetadata = {
   name: "Hedera Donation",
   description: "Hedera donation app",
-  icon: "https://lucky-donation.kingofshiba.xyz/favicon.ico",
-  url: "https://lucky-donation.kingofshiba.xyz",
+  icon: "https://donation.kingofshiba.xyz/favicon.ico",
+  url: "https://donation.kingofshiba.xyz",
 };
 
 export const HashConnectProvider = ({ children }: { children: ReactNode }) => {

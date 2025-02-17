@@ -20,4 +20,4 @@ services:
       - /var/www/certbot:/var/www/certbot
       - /etc/letsencrypt:/etc/letsencrypt
     command: >
-      certonly --webroot --webroot-path=/var/www/certbot --email duyduysysy@gmail.com --agree-tos --non-interactive --expand --domains lucky-donation.kingofshiba.xyz
+      certonly --webroot --webroot-path=/var/www/certbot --email duyduysysy@gmail.com --agree-tos --non-interactive --expand --domains donation.kingofshiba.xyz

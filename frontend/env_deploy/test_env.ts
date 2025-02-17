@@ -1,5 +1,5 @@
 const REACT_APP_PUBLIC_API_BASE_URL: string =
-  "https://lucky-donation.kingofshiba.xyz/api";
+  "https://donation.kingofshiba.xyz/api";
 const DEV_MODE: boolean = true;
 const EXPLORER_SCAN = "https://hashscan.io/testnet";
 const CONTRACT_ID = "0.0.5224129";

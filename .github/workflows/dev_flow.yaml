@@ -1,0 +1,96 @@
+name: Build and Push Multi-Arch Docker Image
+
+on:
+  push:
+    branches: ["dev"]
+
+jobs:
+  # ---------------------
+  # 1) Build per arch
+  # ---------------------
+  build-per-arch:
+    runs-on: ${{ matrix.runner }}
+
+    # This strategy sets up a matrix for [amd64, arm64]
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-latest
+
+      # Ensure we continue if one fails so we can see both logs
+      # remove if you want to fail fast
+      fail-fast: false
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Check out source
+        uses: actions/checkout@v3
+
+      # Step 2: Set up QEMU (for cross-arch emulation on GitHub runners)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      # Step 3: Set up Docker Buildx
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 4: Log in to Docker Hub (uses secrets from your repo settings)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 5: Make your script executable
+      - name: Make build_and_push.sh executable
+        run: chmod +x devops/build_and_push.sh
+
+      # Step 6: Run the script for the single arch
+      - name: Build images for ${{ matrix.arch }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          VERSION: latest
+          TARGET_ARCH: ${{ matrix.arch }}
+        run: |
+          cd devops
+          ./build_and_push.sh
+  # ---------------------
+  # 2) Create multi-arch manifest (optional, but recommended)
+  # ---------------------
+  create-manifest:
+    # Wait until all matrix builds are complete
+    needs: [build-per-arch]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Create multi-arch manifest (Python)
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_api:latest \
+            ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_api:latest-amd64 \
+            ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_api:latest-arm64
+
+      - name: Create multi-arch manifest (Worker)
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_worker:latest \
+            ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_worker:latest-amd64 \
+            ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_worker:latest-arm64
+
+      - name: Create multi-arch manifest (Ui)
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_ui:latest \
+            ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_ui:latest-amd64 \
+            ${{ secrets.DOCKER_USERNAME }}/hedera_hackathon_ui:latest-arm64

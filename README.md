@@ -1,7 +1,7 @@
 # Hedera Donation Platform
 
 ## Live Website
-[https://lucky-donation.kingofshiba.xyz/](https://lucky-donation.kingofshiba.xyz/)
+[https://donation.kingofshiba.xyz/](https://donation.kingofshiba.xyz/)
 
 **Note**: Please visit the live platform to explore the full functionality of the Hedera Donation project.
 

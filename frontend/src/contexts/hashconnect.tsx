@@ -35,8 +35,8 @@ const HashConnectContext = createContext<HashConnectContextType | undefined>(
 const appMetadata = {
   name: "Hedera Donation",
   description: "Hedera donation app",
-  icons: ["https://lucky-donation.kingofshiba.xyz/favicon.ico"],
-  url: "https://lucky-donation.kingofshiba.xyz",
+  icons: ["https://donation.kingofshiba.xyz/favicon.ico"],
+  url: "https://donation.kingofshiba.xyz",
 };
 
 const PROJECT_ID = "c611507a309f2ac32d59eafd139ae365";

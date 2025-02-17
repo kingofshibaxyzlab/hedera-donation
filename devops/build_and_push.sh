@@ -1,41 +1,75 @@
 #!/bin/bash
 
+# Stop on any error
+set -e
+
+# --------------------------------------------------
 # Configuration
-DOCKER_USERNAME="duysy123"
+# --------------------------------------------------
+DOCKER_USERNAME="${DOCKER_USERNAME:-duysy123}"
+VERSION="${VERSION:-latest}"
+TARGET_ARCH="${TARGET_ARCH:-amd64}"
+
+# Project image names
 API_IMAGE_NAME="hedera_hackathon_api"
 WORKER_IMAGE_NAME="hedera_hackathon_worker"
 UI_IMAGE_NAME="hedera_hackathon_ui"
-VERSION="latest"
 
-# Paths to the projects
+# Paths to Docker contexts
 API_PATH="../backend/hedera_donation"
 WORKER_PATH="../smart-contract"
 UI_PATH="../frontend"
 
-# Function to build and push multi-architecture Docker images
-build_and_push_multi_arch_image() {
-    local image_name=$1
-    local image_path=$2
-    local full_image_name="${DOCKER_USERNAME}/${image_name}:${VERSION}"
+# --------------------------------------------------
+# Function: Build + Push Single-Arch
+# --------------------------------------------------
+# The fourth parameter, USE_TARGET, indicates whether to pass the --target flag.
+build_and_push_single_arch() {
+    local image_name="$1"
+    local image_path="$2"
+    local arch="$3"
+    local use_target="$4"  # true or false
+    local full_image="${DOCKER_USERNAME}/${image_name}:${VERSION}-${arch}"
 
-    echo "Building multi-arch image: $full_image_name from $image_path..."
-    docker buildx build --platform linux/amd64,linux/arm64 \
-        -t "$full_image_name" \
-        --push "$image_path" || { echo "Failed to build and push $image_name"; exit 1; }
+    echo "------------------------------------------------"
+    echo "Building single-arch image: ${full_image}"
+    echo "Context path: ${image_path}"
+    echo "Architecture: ${arch}"
+    echo "------------------------------------------------"
+
+    if [ "$use_target" = "true" ]; then
+        docker buildx build \
+            --platform "linux/${arch}" \
+            --build-arg RUNNER_STAGE="runner-${arch}" \
+            --target "runner-${arch}" \
+            -t "${full_image}" \
+            --push \
+            "${image_path}" || {
+                echo "Failed to build and push ${image_name} for arch=${arch}"
+                exit 1
+            }
+    else
+        docker buildx build \
+            --platform "linux/${arch}" \
+            -t "${full_image}" \
+            --push \
+            "${image_path}" || {
+                echo "Failed to build and push ${image_name} for arch=${arch}"
+                exit 1
+            }
+    fi
 }
 
-# Login to Docker Hub
-echo "Logging in to Docker Hub..."
-docker login || { echo "Docker login failed. Exiting..."; exit 1; }
+# --------------------------------------------------
+# Main Script
+# --------------------------------------------------
+echo "===== Building images for TARGET_ARCH=${TARGET_ARCH} ====="
 
-# Enable Buildx
-echo "Ensuring Docker Buildx is set up..."
 docker buildx create --use --name multiarch-builder || docker buildx use multiarch-builder
 docker buildx inspect --bootstrap
 
-# Build and push images
-build_and_push_multi_arch_image "$API_IMAGE_NAME" "$API_PATH"
-build_and_push_multi_arch_image "$WORKER_IMAGE_NAME" "$WORKER_PATH"
-build_and_push_multi_arch_image "$UI_IMAGE_NAME" "$UI_PATH"
-
-echo "All multi-architecture images built and pushed successfully!"
+# For Python and Node, do not use --target (assume their Dockerfiles have a single final stage)
+build_and_push_single_arch "$UI_IMAGE_NAME"   "$UI_PATH"   "$TARGET_ARCH" false
+build_and_push_single_arch "$API_IMAGE_NAME" "$API_PATH" "$TARGET_ARCH" false
+build_and_push_single_arch "$WORKER_IMAGE_NAME" "$WORKER_PATH" "$TARGET_ARCH" false
+echo "All images for arch=${TARGET_ARCH} built and pushed successfully."
