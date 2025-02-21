@@ -16,9 +16,9 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: ubuntu-latest
+            runner: self-hosted
           - arch: arm64
-            runner: ubuntu-latest
+            runner: self-hosted
 
       # Ensure we continue if one fails so we can see both logs
       # remove if you want to fail fast
