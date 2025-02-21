@@ -79,6 +79,7 @@ export interface ApprovedCampaignJoin {
     token_symbol: string;
     token_address: string;
     token_decimal: number;
+    token_account_id: string;
     campaign_type_name: string;
     organizer_username: string;
     organizer_wallet_address: string;
@@ -87,6 +88,5 @@ export interface ApprovedCampaignJoin {
 }
 
 export interface CampaignPublishResult {
-    onchainId: number;
     transactionHash: string;
 }

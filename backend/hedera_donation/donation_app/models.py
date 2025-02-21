@@ -1,8 +1,7 @@
 from django.db import models
 
 class HederaUser(models.Model):
-    username = models.CharField(
-        max_length=150, unique=True, blank=True, null=True)
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -11,8 +10,8 @@ class HederaUser(models.Model):
     bio = models.TextField(blank=True, null=True)
     facebook = models.CharField(blank=True, null=True)
     twitter = models.CharField(blank=True, null=True)
-    image = models.CharField(blank=True, null=True,
-                            default="https://placehold.co/150x150")
+    image = models.CharField(blank=True, null=True, default="https://placehold.co/150x150")
+    nonce = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.username or "Anonymous"

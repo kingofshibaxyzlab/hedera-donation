@@ -1,6 +1,6 @@
 import { UrlMapping } from "@/commons/url-mapping.common";
 import { useHashConnectContext } from "@/contexts/hashconnect";
-import { useLogin } from "@/services/apis/auth";
+import { useLogin, useNonce } from "@/services/apis/auth";
 import { useAuthStore } from "@/services/stores/useAuthStore";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,15 +9,23 @@ const LoginPage: React.FC = () => {
   const { mutate: loginMutate, isPending: isLoggingIn } = useLogin();
   const navigate = useNavigate();
   const { login } = useAuthStore();
-  const { connectToWallet, walletAddress } = useHashConnectContext();
-  const handleLogin = () => {
-    if (!walletAddress) {
+  const { connectToWallet, walletAddress, signData } = useHashConnectContext();
+
+  const { data: dataNonce, isLoading: isNonceLoading } = useNonce({
+    variables: { walletAddress: walletAddress || "" },
+    enabled: Boolean(walletAddress),
+  });
+  const handleLogin = async () => {
+    const nonce = dataNonce?.nonce;
+    if (!walletAddress || !nonce) {
       alert("Please connect your wallet first.");
       return;
     }
-
+    const signatureArray = await sign(nonce);
+    const rawSignature = signatureArray?.[0]?.signature;
+    const signatureString = rawSignature ? bytesToHex(rawSignature) : "";
     loginMutate(
-      { wallet_address: walletAddress },
+      { wallet_address: walletAddress, signature: signatureString },
       {
         onSuccess: async (data) => {
           try {
@@ -36,6 +44,32 @@ const LoginPage: React.FC = () => {
     );
   };
 
+  // Helper function to convert Uint8Array to a hex string
+  function bytesToHex(uint8array: Uint8Array): string {
+    return Array.from(uint8array)
+      .map((byte: number) => byte.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  const prefixMessageToSign = (message: string): string => {
+    return (
+      "Welcome to ShibaAngels, please sign this message to login:\n" + message
+    );
+  };
+
+  const sign = async (message: string) => {
+    if (!walletAddress || !signData) {
+      alert("Please connect your wallet first.");
+      return;
+    }
+    const prefixedMessage = prefixMessageToSign(message);
+    try {
+      return await signData(prefixedMessage);
+    } catch (error) {
+      console.error("Signing failed", error);
+      alert("Signing failed, please try again.");
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 via-gray-50 to-blue-50">
       <div className="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md">
@@ -57,7 +91,7 @@ const LoginPage: React.FC = () => {
             ? `Connected: ${walletAddress}`
             : "Connect HashPack Wallet"}
         </button>
-        {walletAddress && (
+        {walletAddress && dataNonce && !isNonceLoading && (
           <button
             onClick={handleLogin}
             className={`w-full bg-yellow-500 text-blue-800 py-3 px-6 rounded-lg font-semibold shadow-md hover:bg-yellow-600 transition duration-300 ${

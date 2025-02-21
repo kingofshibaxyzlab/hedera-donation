@@ -27,6 +27,7 @@ from .schemas import (
     TopDonorSchema,
     UserInfoSchema,
     UserUpdateSchema,
+    AuthNonce
 )
 from typing import List
 from django.db.models import Sum
@@ -68,13 +69,13 @@ def jwt_authentication(request):
         raise HttpError(401, "Invalid or expired token")
 
 
-# Authentication Endpoints
-@api.post("/login", tags=["Authentication"], response=LoginResponseSchema)
+@api.post("/auth/login", tags=["Authentication"], response=LoginResponseSchema)
 def login(request, payload: LoginSchema):
     try:
         user, created = HederaUser.objects.get_or_create(
             wallet_address=payload.wallet_address
         )
+        signature = payload.signature
         if created:
             user.username = f"User_{payload.wallet_address}"
             user.is_active = True
@@ -83,10 +84,26 @@ def login(request, payload: LoginSchema):
             raise HttpError(403, "User account is disabled")
         token = generate_jwt_token(user)
         return LoginResponseSchema(
-            token=token, username=user.username, wallet_address=user.wallet_address,image=user.image,name=user.name
+            token=token, 
+            username=user.username, 
+            wallet_address=user.wallet_address,
+            image=user.image,
+            name=user.name
         )
     except Exception as e:
         raise HttpError(400, str(e))
+
+    
+
+@api.get("/auth/nonce", tags=["Authentication"], response=AuthNonce)
+def get_nonce(request, wallet_address: str):
+    user, created = HederaUser.objects.get_or_create(wallet_address=wallet_address)
+    if created:
+        user.username = f"User_{wallet_address}"
+        user.is_active = True
+    user.nonce = uuid.uuid4().hex
+    user.save()
+    return AuthNonce(wallet_address=wallet_address, nonce=user.nonce)
 
 
 # User Management APIs
@@ -390,7 +407,7 @@ def list_tokens(request):
 # Leaderboard APIs
 @api.get("/top-campaigns", tags=["Leaderboards"], response=List[TopCampaignSchema])
 def get_top_campaigns(request):
-    campaigns = Campaign.objects.filter(goal__gt=0, approved_by_admin=True).order_by("-percentage_completed")[:6]
+    campaigns = Campaign.objects.filter(goal__gt=0, approved_by_admin=True, onchain_id__isnull=False).order_by("-percentage_completed")[:6]
     return [
         {
             "id": campaign.id,
@@ -437,14 +454,14 @@ def get_top_donors(request):
 # Upload file
 @api.post("/upload-file", tags=["File Management"])
 def upload_file(request, file: NinjaUploadedFile = File(...)):
-    DOMAIN_ROOT = settings.DOMAIN_ROOT
+    DOMAIN_MEDIA_ROOT = settings.DOMAIN_MEDIA_ROOT
     try:
         # Generate a unique file name
         file_extension = os.path.splitext(file.name)[1]
         unique_file_name = f"{uuid.uuid4().hex}{file_extension}"
 
         file_name = default_storage.save(unique_file_name, file)
-        file_url = f"{DOMAIN_ROOT}/{file_name}"
+        file_url = f"{DOMAIN_MEDIA_ROOT}/{file_name}"
 
         return {"message": "File uploaded successfully", "file_name": file_name, "file_url": file_url}
     except Exception as e:

@@ -8,28 +8,22 @@ export function decodeLogs(logs: LogEntry[]): DecodedLog[] {
 
     logs.forEach((log: LogEntry) => {
         try {
-            const decodedLog: LogDescription = iface.parseLog({
-                topics: log.topics,
-                data: log.data,
-            }) as LogDescription;
-
+            const decoded: LogDescription = iface.parseLog({ topics: log.topics, data: log.data }) as LogDescription;
             const jsonLog: DecodedLog = {
-                eventName: decodedLog.name,
-                signature: decodedLog.signature,
-                args: decodedLog.args.reduce((acc: Record<string, string>, value, index) => {
-                    const inputName = decodedLog.fragment.inputs[index]?.name || `arg${index}`;
+                eventName: decoded.name,
+                signature: decoded.signature,
+                args: decoded.args.reduce((acc: Record<string, string>, value, index) => {
+                    const inputName = decoded.fragment.inputs[index]?.name || `arg${index}`;
                     acc[inputName] = value.toString();
                     return acc;
                 }, {}),
                 transactionHash: log.transaction_hash,
                 timestamp: log.timestamp,
             };
-
             decodedLogs.push(jsonLog);
         } catch (error) {
             console.error("Error decoding log:", error);
         }
     });
-
     return decodedLogs;
 }

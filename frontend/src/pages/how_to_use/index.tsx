@@ -8,7 +8,7 @@ const HowToUsePage: React.FC = () => {
 
       <main className="container mx-auto py-16 px-6 md:px-20">
         <h2 className="text-5xl font-bold text-blue-800 mb-12 text-center">
-          How to Use Hedera Donations
+          How to Use ShibaAngels
         </h2>
 
         {/* Getting Started Section */}

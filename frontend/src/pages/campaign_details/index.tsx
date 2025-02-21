@@ -21,34 +21,27 @@ const CampaignDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [donationAmount, setDonationAmount] = useState<number>(0);
   const { walletAddress } = useHashConnectContext();
-
   const navigate = useNavigate();
 
   const { donate, error, loading, success, transactionHash } =
     useHederaDonate();
-
   const {
     checkAndApproveToken,
     error: errorCheckAndApproveToken,
     loading: loadingCheckAndApproveToken,
   } = useHederaTokenApproval();
 
-  // Fetch data
   const {
     data: campaignDetails,
     isLoading: isCampaignLoading,
     refetch: refreshCampaign,
-  } = useCampaignDetails({
-    variables: { id: id! },
-  });
+  } = useCampaignDetails({ variables: { id: id! } });
 
   const {
     data: donationHistory,
     isLoading: isHistoryLoading,
     refetch: refreshHistory,
-  } = useDonationHistoryByCampaign({
-    variables: { campaignId: Number(id) },
-  });
+  } = useDonationHistoryByCampaign({ variables: { campaignId: Number(id) } });
 
   const { getTokenBalance, balance } = useTokenBalance();
 
@@ -57,18 +50,19 @@ const CampaignDetailsPage: React.FC = () => {
       campaignDetails?.campaign?.token?.address &&
       campaignDetails?.campaign?.token?.account_id
     ) {
-      if (walletAddress)
+      if (walletAddress) {
         getTokenBalance(
           walletAddress,
-          campaignDetails?.campaign?.token?.account_id
+          campaignDetails.campaign.token.account_id
         );
+      }
     }
-  }, [campaignDetails, walletAddress]);
+  }, [campaignDetails, walletAddress, getTokenBalance]);
 
   const handleDonate = async () => {
     if (campaignDetails?.campaign?.onchain_id && donationAmount > 0) {
       const isApproved = await checkAndApproveToken(
-        campaign.token?.address || "", //need convert evm address to account id
+        campaignDetails.campaign.token?.address || "",
         env.CONTRACT_ID,
         donationAmount
       );
@@ -96,39 +90,41 @@ const CampaignDetailsPage: React.FC = () => {
 
   const renderDonationHistory = () => {
     if (isHistoryLoading) {
-      return <p>Loading donation history...</p>;
+      return (
+        <p className="text-center text-gray-600">Loading donation history...</p>
+      );
     }
 
     if (!donationHistory || donationHistory.length === 0) {
-      return <p>No donations yet.</p>;
+      return <p className="text-center text-gray-600">No donations yet.</p>;
     }
 
     return donationHistory.map((donation, index) => (
       <div
         key={index}
-        className="p-3 border rounded-lg shadow-lg flex items-center space-x-6 hover:bg-gray-50 transition ease-in-out duration-300 mt-3"
+        className="p-4 border rounded-xl shadow-md flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4"
       >
         <img
           src={donation.user_image || "https://placehold.co/100x100"}
           alt={donation.campaign_title}
-          className="w-24 h-24 object-cover rounded-lg"
+          className="w-20 h-20 object-cover rounded-full border"
         />
-        <div>
-          <p className="text-xl font-bold text-blue-800 cursor-pointer">
+        <div className="flex-1">
+          <p className="text-xl font-semibold text-blue-800">
             {donation.user_name} | {donation.user_username}
           </p>
-          <p className="text-gray-600">
-            Amount: {donation.amount} {campaign?.token?.symbol}{" "}
+          <p className="text-gray-700">
+            Amount: {donation.amount} {campaignDetails?.campaign.token?.symbol}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-500 text-sm">
             Donated:{" "}
             {donation.date
-              ? `${formatDistanceToNow(new Date(donation.date), {
+              ? formatDistanceToNow(new Date(donation.date), {
                   addSuffix: true,
-                })}`
+                })
               : "Unknown time ago"}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-500 text-sm">
             Transaction Hash:{" "}
             {donation.transaction_hash ? (
               <a
@@ -154,7 +150,7 @@ const CampaignDetailsPage: React.FC = () => {
     return campaignDetails.related_campaigns.map((related) => (
       <div
         key={related.id}
-        className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300"
+        className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"
       >
         <img
           src={related.image}
@@ -162,17 +158,17 @@ const CampaignDetailsPage: React.FC = () => {
           className="w-full h-56 object-cover"
         />
         <div className="p-6">
-          <h4 className="text-2xl font-bold text-blue-700 mb-4">
+          <h4 className="text-2xl font-bold text-blue-700 mb-2">
             {related.title}
           </h4>
-          <p className="text-sm text-gray-600 mb-6">{related.description}</p>
-          <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-4">
+          <p className="text-sm text-gray-600 mb-4">{related.description}</p>
+          <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-3">
             <div
               className="bg-blue-600 h-full"
               style={{ width: `${related.progress}%` }}
             ></div>
           </div>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 mb-4">
             {related.progress}% funded
           </p>
           <div className="text-center">
@@ -180,7 +176,7 @@ const CampaignDetailsPage: React.FC = () => {
               onClick={() =>
                 navigate(`${UrlMapping.campaign_detail}/${related.id}`)
               }
-              className="bg-blue-600 text-white py-3 px-6 rounded-md font-medium hover:bg-blue-700 transition duration-300"
+              className="bg-blue-600 text-white py-2 px-4 rounded-full font-medium hover:bg-blue-700 transition-colors duration-300"
             >
               View Campaign
             </button>
@@ -192,9 +188,11 @@ const CampaignDetailsPage: React.FC = () => {
 
   if (isCampaignLoading) {
     return (
-      <div className="bg-gray-50 min-h-screen">
+      <div className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen flex flex-col">
         <NavigationBar />
-        <div className="text-center mt-20">Loading...</div>
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-2xl text-gray-600">Loading...</p>
+        </div>
         <Footer />
       </div>
     );
@@ -202,9 +200,11 @@ const CampaignDetailsPage: React.FC = () => {
 
   if (!campaignDetails) {
     return (
-      <div className="bg-gray-50 min-h-screen">
+      <div className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen flex flex-col">
         <NavigationBar />
-        <div className="text-center mt-20">Campaign not found.</div>
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-2xl text-gray-600">Campaign not found.</p>
+        </div>
         <Footer />
       </div>
     );
@@ -213,25 +213,22 @@ const CampaignDetailsPage: React.FC = () => {
   const { campaign } = campaignDetails;
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen flex flex-col">
       <NavigationBar />
-      <main className="container mx-auto py-16 px-6 md:px-20">
-        {/* Campaign Title */}
+      <main className="container mx-auto py-16 px-6 md:px-20 flex-1">
+        {/* Campaign Title Section */}
         <section className="text-center mb-12">
-          <div className="flex items-center justify-between">
-            {/* Campaign Details */}
-            <div className="flex-1 text-center">
-              <h2 className="text-5xl font-bold text-blue-800 mb-4">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="flex-1 mb-4 md:mb-0">
+              <h2 className="text-5xl font-bold text-blue-900 mb-2">
                 {campaign.title}
               </h2>
-              <p className="text-lg text-gray-600">
-                Organizer: {campaign?.organizer?.username || "Unknown"}
+              <p className="text-lg text-gray-700">
+                Organized by: {campaign?.organizer?.username || "Unknown"}
               </p>
             </div>
-
-            {/* Campaign Status */}
             <span
-              className={`px-3 py-1 rounded-full text-lg font-medium ${getStatusBadgeClass(
+              className={`px-4 py-1 rounded-full text-lg font-medium ${getStatusBadgeClass(
                 campaign.status || ""
               )}`}
             >
@@ -245,24 +242,24 @@ const CampaignDetailsPage: React.FC = () => {
           <img
             src={campaign?.image || "https://via.placeholder.com/150"}
             alt="Campaign"
-            className="w-full max-h-[80vh] rounded-lg object-cover shadow-xl p-5"
+            className="w-full max-h-[80vh] rounded-2xl object-cover shadow-xl border p-4 bg-white"
           />
         </div>
 
         {/* Campaign Details */}
-        <section className="bg-white rounded-xl p-8 shadow-md mb-16">
-          <h3 className="text-3xl font-bold text-blue-800 mb-6">
+        <section className="bg-white rounded-2xl p-10 shadow-xl mb-16">
+          <h3 className="text-3xl font-bold text-blue-900 mb-6">
             Campaign Details
           </h3>
-          <p className="text-xl text-gray-700 leading-relaxed mb-10">
+          <p className="text-xl text-gray-800 leading-relaxed mb-8">
             {campaign.description}
           </p>
 
-          <div className="mb-8">
+          <div className="mb-6">
             <h4 className="text-2xl font-bold text-blue-700">
-              Created Transaction on Hashscan
+              Created Transaction
             </h4>
-            <p className="text-lg text-gray-600 mt-2">
+            <p className="text-lg text-gray-700 mt-2">
               {campaign.transaction_hash_create ? (
                 <a
                   href={`${env.EXPLORER_SCAN}/transaction/${campaign.transaction_hash_create}`}
@@ -273,18 +270,16 @@ const CampaignDetailsPage: React.FC = () => {
                   {shortenTransactionHash(campaign.transaction_hash_create)}
                 </a>
               ) : (
-                <span className="text-red-600 text-sm">
-                  No transaction hash available for the creation.
-                </span>
+                <span className="text-red-600 text-sm">Not available.</span>
               )}
             </p>
           </div>
 
-          <div className="mb-8">
+          <div className="mb-6">
             <h4 className="text-2xl font-bold text-blue-700">
-              Withdrawn Transaction on Hashscan
+              Withdrawn Transaction
             </h4>
-            <p className="text-lg text-gray-600 mt-2">
+            <p className="text-lg text-gray-700 mt-2">
               {campaign.transaction_hash_withdrawn ? (
                 <a
                   href={`${env.EXPLORER_SCAN}/transaction/${campaign.transaction_hash_withdrawn}`}
@@ -295,51 +290,52 @@ const CampaignDetailsPage: React.FC = () => {
                   {shortenTransactionHash(campaign.transaction_hash_withdrawn)}
                 </a>
               ) : (
-                <span className="text-red-600 text-sm">
-                  No transaction hash available for the withdrawal.
-                </span>
+                <span className="text-red-600 text-sm">Not available.</span>
               )}
             </p>
           </div>
 
-          <div className="mb-8">
+          <div className="mb-6">
             <h4 className="text-2xl font-bold text-blue-700">Campaign Type</h4>
-            <p className="text-lg text-gray-600 mt-2">
+            <p className="text-lg text-gray-700 mt-2">
               {campaign?.campaign_type?.name}
             </p>
           </div>
-          <div className="mb-8">
+
+          <div className="mb-6">
             <h4 className="text-2xl font-bold text-blue-700">Donation Goal</h4>
-            <p className="text-lg text-gray-600 mt-2">
+            <p className="text-lg text-gray-700 mt-2">
               Goal:{" "}
-              <b>
+              <strong>
                 {campaign?.current_amount} / {campaign.goal}{" "}
                 {campaign.token?.symbol}
-              </b>
+              </strong>
             </p>
           </div>
-          <div className="mb-10">
-            <h4 className="text-2xl font-bold text-blue-700 mb-4">
+
+          <div className="mb-8">
+            <h4 className="text-2xl font-bold text-blue-700 mb-3">
               Donation Progress
             </h4>
-            <div className="flex justify-center items-center">
-              <div className="w-full bg-gray-200 h-4 rounded-full overflow-hidden mr-3">
+            <div className="flex items-center justify-center">
+              <div className="w-full bg-gray-200 h-4 rounded-full overflow-hidden mr-4">
                 <div
-                  className="bg-red-600 h-full transition-all duration-500 ease-in-out"
+                  className="bg-red-500 h-full transition-all duration-500"
                   style={{ width: `${campaign.progress}%` }}
                 ></div>
               </div>
-              <b className="text-lg text-yellow-500 min-w-28">
+              <span className="text-lg text-yellow-500 font-semibold min-w-[4rem]">
                 {campaign.progress}% funded
-              </b>
+              </span>
             </div>
           </div>
+
           {campaign.video_link && (
-            <div className="mb-8">
+            <div className="mb-6">
               <h4 className="text-2xl font-bold text-blue-700">
                 Campaign Video
               </h4>
-              <p className="text-md text-blue-500 mt-2 underline">
+              <p className="text-md text-blue-600 mt-2 underline">
                 <a
                   href={campaign.video_link}
                   target="_blank"
@@ -350,10 +346,11 @@ const CampaignDetailsPage: React.FC = () => {
               </p>
             </div>
           )}
+
           {campaign.project_url && (
-            <div className="mb-8">
+            <div className="mb-6">
               <h4 className="text-2xl font-bold text-blue-700">Project URL</h4>
-              <p className="text-md text-blue-500 mt-2 underline">
+              <p className="text-md text-blue-600 mt-2 underline">
                 <a
                   href={campaign.project_url}
                   target="_blank"
@@ -364,20 +361,21 @@ const CampaignDetailsPage: React.FC = () => {
               </p>
             </div>
           )}
-          <div className="mb-8">
+
+          <div className="mb-6">
             <h4 className="text-2xl font-bold text-blue-700">Your Balance</h4>
-            <p className="text-lg text-gray-600 mt-2">
-              <b>{balance}</b> {campaign.token?.symbol}
-              <span className="text-gray-500"> | </span>
-              {campaign.token?.name}
-              <span className="text-gray-500"> | </span>
+            <p className="text-lg text-gray-700 mt-2">
+              <strong>{balance}</strong> {campaign.token?.symbol}{" "}
+              <span className="text-gray-500 mx-2">|</span>
+              {campaign.token?.name}{" "}
+              <span className="text-gray-500 mx-2">|</span>
               {campaign.token?.account_id}
             </p>
           </div>
 
-          <div className="mb-8">
+          <div className="mb-2">
             <h4 className="text-2xl font-bold text-blue-700">Donate Now</h4>
-            <div className="flex items-center space-x-4 mt-4">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
               <input
                 type="number"
                 value={donationAmount}
@@ -392,33 +390,32 @@ const CampaignDetailsPage: React.FC = () => {
                   donationAmount <= 0 ||
                   campaign.status === CampaignStatus.CLOSED
                 }
-                className={`py-4 px-10 rounded-full font-semibold text-lg shadow-md transition-all duration-300 ${
+                className={`py-3 px-8 rounded-full font-semibold text-lg shadow-md transition-colors duration-300 ${
                   loading ||
                   donationAmount <= 0 ||
                   campaign.status === CampaignStatus.CLOSED
                     ? "bg-yellow-400 cursor-not-allowed"
-                    : "bg-green-500 text-white hover:bg-green-600 hover:shadow-lg"
-                } ${!loading && "animate-bounce"}`}
+                    : "bg-green-500 text-white hover:bg-green-600"
+                }`}
               >
                 {loading ? "Processing..." : "Donate"}
               </button>
             </div>
             {donationAmount <= 0 && (
-              <p className="text-red-500 mt-4">
+              <p className="text-red-500 mt-2">
                 Please set a valid donation amount.
               </p>
             )}
-
             {(error || errorCheckAndApproveToken) && (
-              <p className="text-red-500 mt-4">
+              <p className="text-red-500 mt-2">
                 {error || errorCheckAndApproveToken}
               </p>
             )}
             {loadingCheckAndApproveToken && (
-              <p className="text-yellow-400 mt-4">Checking approve token</p>
+              <p className="text-yellow-500 mt-2">Checking token approval...</p>
             )}
             {success && (
-              <p className="mt-4 text-lg">
+              <p className="mt-2 text-lg">
                 View on explorer:{" "}
                 <a
                   href={`${env.EXPLORER_SCAN}/transaction/${transactionHash}`}
@@ -433,9 +430,9 @@ const CampaignDetailsPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Donation History */}
-        <section className="bg-white rounded-xl p-8 shadow-md mb-16">
-          <h3 className="text-3xl font-bold text-blue-800 mb-6">
+        {/* Donation History Section */}
+        <section className="bg-white rounded-2xl p-8 shadow-xl mb-16">
+          <h3 className="text-3xl font-bold text-blue-900 mb-6">
             Donation History
           </h3>
           <div className="max-h-96 overflow-y-auto">
@@ -443,12 +440,12 @@ const CampaignDetailsPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Related Campaigns */}
+        {/* Related Campaigns Section */}
         <section className="mt-16">
-          <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
+          <h3 className="text-4xl font-bold text-blue-900 mb-12 text-center">
             Related Campaigns
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {renderRelatedCampaigns()}
           </div>
         </section>

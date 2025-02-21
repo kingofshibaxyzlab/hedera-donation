@@ -1,5 +1,6 @@
 from typing import List, Optional
 from ninja import Schema
+from pydantic import field_validator
 
 
 class UserSchema(Schema):
@@ -131,7 +132,6 @@ class CampaignDonationHistorySchema(Schema):
 
 
 
-
 class RelatedCampaignSchema(Schema):
     id: int
     title: str
@@ -145,8 +145,24 @@ class CampaignDetailResponseSchema(Schema):
     related_campaigns: List[RelatedCampaignSchema]
 
 
+
 class LoginSchema(Schema):
     wallet_address: str
+    signature: str
+
+    @field_validator("wallet_address")
+    @classmethod
+    def validate_wallet_address(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("wallet_address must not be empty")
+        return value
+
+    @field_validator("signature")
+    @classmethod
+    def validate_signature(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("signature must not be empty")
+        return value
 
 
 class LoginResponseSchema(Schema):
@@ -155,3 +171,14 @@ class LoginResponseSchema(Schema):
     wallet_address: str
     image: Optional[str]
     name: Optional[str]
+
+class AuthNonce(Schema):
+    wallet_address: str
+    nonce: str
+
+    @field_validator("wallet_address")
+    @classmethod
+    def wallet_address_must_not_be_empty(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("wallet_address must not be empty")
+        return value

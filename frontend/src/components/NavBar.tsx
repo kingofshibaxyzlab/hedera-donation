@@ -43,13 +43,23 @@ const NavigationBar = () => {
     >
       <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center py-4 px-6">
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center gap-3">
           <img
             src={DonationLogo}
             alt="Logo"
-            className="w-12 h-12 rounded-full"
+            className="w-12 h-12 rounded-full shadow-md"
           />
-          <h1 className="text-2xl font-bold text-white">Hedera Donations</h1>
+          <h1 className="text-2xl font-bold text-white tracking-wide">
+            ShibaAngels
+          </h1>
+          {/* Mobile Menu Toggle */}
+          <div className="lg:hidden ml-auto" onClick={toggleMenu}>
+            {isMenuOpen ? (
+              <AiOutlineClose className="text-white w-8 h-8 cursor-pointer transition-transform duration-300 transform hover:scale-110" />
+            ) : (
+              <AiOutlineMenu className="text-white w-8 h-8 cursor-pointer transition-transform duration-300 transform hover:scale-110" />
+            )}
+          </div>
         </Link>
 
         {/* Navigation Links */}
@@ -78,20 +88,24 @@ const NavigationBar = () => {
         {/* Authenticated User or Connect Wallet */}
         <div
           className={`${
-            isMenuOpen ? "flex flex-col mt-4 lg:mt-0" : "hidden lg:flex"
-          } items-center lg:space-x-6`}
+            isMenuOpen
+              ? "flex flex-col mt-4 space-y-4 lg:mt-0"
+              : "hidden lg:flex lg:space-x-6"
+          } items-center`}
         >
           {isAuthenticated ? (
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+              {/* Create Campaign Button */}
               <Link
                 to={UrlMapping.create_campaign || "#"}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-5 rounded-full font-medium shadow-lg transition duration-300"
+                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-5 rounded-full font-medium shadow-lg transition duration-300 w-full lg:w-auto text-center"
               >
                 Create Campaign
               </Link>
 
+              {/* User Profile Section */}
               <div
-                className="flex items-center cursor-pointer"
+                className="flex items-center justify-center space-x-2 w-full lg:w-auto cursor-pointer"
                 onClick={handleUserIconClick}
               >
                 <img
@@ -99,14 +113,15 @@ const NavigationBar = () => {
                   alt="User Icon"
                   className="w-12 h-12 rounded-full border-2 border-white shadow-md"
                 />
-                <span className="text-white font-medium ml-2 hidden sm:inline-block">
+                <span className="text-white font-medium hidden sm:inline-block">
                   {walletAddress}
                 </span>
               </div>
 
+              {/* Disconnect Button */}
               <button
                 onClick={handleDisconnect}
-                className="bg-red-600 text-white py-2 px-5 rounded-full font-medium shadow-md hover:bg-red-700 transition duration-300"
+                className="bg-red-600 text-white py-2 px-5 rounded-full font-medium shadow-md hover:bg-red-700 transition duration-300 w-full lg:w-auto"
               >
                 Disconnect
               </button>
@@ -114,19 +129,10 @@ const NavigationBar = () => {
           ) : (
             <button
               onClick={handleLoginClick}
-              className="bg-yellow-400 text-blue-800 py-2 px-5 rounded-full font-medium shadow-md hover:bg-yellow-500 transition duration-300"
+              className="bg-yellow-400 text-blue-800 py-2 px-5 rounded-full font-medium shadow-md hover:bg-yellow-500 transition duration-300 w-full lg:w-auto text-center"
             >
               Connect Wallet
             </button>
-          )}
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <div className="lg:hidden mt-4" onClick={toggleMenu}>
-          {isMenuOpen ? (
-            <AiOutlineClose className="text-white w-8 h-8 cursor-pointer" />
-          ) : (
-            <AiOutlineMenu className="text-white w-8 h-8 cursor-pointer" />
           )}
         </div>
       </div>

@@ -9,36 +9,35 @@ import { useNavigate } from "react-router-dom";
 
 const AllCampaignsPage: React.FC = () => {
   const navigate = useNavigate();
-
-  // Fetch campaigns data from the API
   const { data: campaigns, isLoading, error } = useCampaigns();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gradient-to-r from-blue-50 to-purple-50 min-h-screen">
       <NavigationBar />
 
-      <main className="container mx-auto py-16 px-6 md:px-20">
-        <h2 className="text-5xl font-bold text-blue-800 mb-12 text-center">
+      <main className="container mx-auto py-16 px-6 md:px-20 min-h-[80vh]">
+        <h2 className="text-5xl font-bold text-blue-900 mb-12 text-center">
           All Campaigns
         </h2>
 
-        {/* Show loading state */}
         {isLoading && (
-          <p className="text-center text-gray-600">Loading campaigns...</p>
+          <p className="text-center text-gray-600 text-xl">
+            Loading campaigns...
+          </p>
         )}
 
-        {/* Show error state */}
         {error && (
-          <p className="text-center text-red-600">Failed to load campaigns.</p>
+          <p className="text-center text-red-600 text-xl">
+            Failed to load campaigns.
+          </p>
         )}
 
-        {/* Campaigns grid */}
         {!isLoading && campaigns && (
           <section className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300 flex flex-col min-h-[500px]"
+                className="bg-white shadow-xl rounded-2xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 flex flex-col min-h-[500px]"
               >
                 <img
                   src={campaign.image || "https://via.placeholder.com/150"}
@@ -47,7 +46,7 @@ const AllCampaignsPage: React.FC = () => {
                 />
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-2xl font-bold text-blue-700">
+                    <h4 className="text-2xl font-bold text-blue-800">
                       {campaign.title}
                     </h4>
                     <span
@@ -58,24 +57,23 @@ const AllCampaignsPage: React.FC = () => {
                       {campaign.status}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-6 flex-grow">
+                  <p className="text-sm text-gray-700 mb-6 flex-grow">
                     {campaign.description.length > 250
-                      ? `${campaign.description.slice(0, 250)} ...`
+                      ? `${campaign.description.slice(0, 250)}...`
                       : campaign.description}
                   </p>
                   <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-4">
                     <div
-                      className="bg-red-600 h-full transition-all duration-700 ease-in-out"
+                      className="bg-red-500 h-full transition-all duration-700 ease-in-out"
                       style={{
                         width: `${campaign.progress || 0}%`,
                       }}
                     ></div>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 mb-4">
                     {campaign.progress || 0}% funded
                   </p>
-
-                  <div className="mt-5">
+                  <div className="mt-auto">
                     <div className="flex justify-between items-center">
                       <button
                         onClick={() =>
@@ -87,7 +85,7 @@ const AllCampaignsPage: React.FC = () => {
                       >
                         View Campaign
                       </button>
-                      <nav className="text-green-500">
+                      <span className="text-green-500 text-sm">
                         Created:{" "}
                         {campaign.created_at
                           ? `${formatDistanceToNow(
@@ -96,8 +94,8 @@ const AllCampaignsPage: React.FC = () => {
                                 addSuffix: true,
                               }
                             )}`
-                          : "Unknown time ago"}
-                      </nav>
+                          : "Unknown"}
+                      </span>
                     </div>
                   </div>
                 </div>

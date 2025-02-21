@@ -1,5 +1,6 @@
 import { useAuthStore } from "@/services/stores/useAuthStore";
 import { AccountId, LedgerId, Transaction } from "@hashgraph/sdk";
+import { SignerSignature } from "@hashgraph/sdk/lib/Signer";
 import {
   HashConnect,
   HashConnectConnectionState,
@@ -26,6 +27,7 @@ interface HashConnectContextType {
     accountId: AccountId,
     transaction: Transaction
   ) => Promise<any>;
+  signData: (data: string) => Promise<SignerSignature[]>;
 }
 
 const HashConnectContext = createContext<HashConnectContextType | undefined>(
@@ -176,6 +178,27 @@ export const HashConnectProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const signData = async (data: string): Promise<SignerSignature[]> => {
+    if (!hashconnectRef.current || !pairingData || !walletAddress) {
+      throw new Error("Wallet not connected or HashConnect not initialized");
+    }
+    try {
+      let signer = hashconnectRef.current.getSigner(
+        AccountId.fromString(walletAddress) as any
+      );
+      const dataToSign = new TextEncoder().encode(data);
+      let signature = await signer.sign([dataToSign]);
+      if (signature.length > 0) {
+        return signature as any;
+      } else {
+        throw new Error("No signature returned from wallet");
+      }
+    } catch (error) {
+      console.error("Data signing failed:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     initializeHashConnect();
     return () => {
@@ -193,6 +216,7 @@ export const HashConnectProvider = ({ children }: { children: ReactNode }) => {
         connectToWallet,
         disconnectWallet,
         sendTransaction,
+        signData,
       }}
     >
       {children}

@@ -8,13 +8,13 @@ const InfoPage: React.FC = () => {
 
       <main className="container mx-auto py-16 px-6 md:px-20">
         <h2 className="text-5xl font-bold text-blue-800 mb-12 text-center">
-          About Hedera Donations
+          About ShibaAngels
         </h2>
 
         <section className="bg-white p-10 rounded-xl shadow-lg mb-16">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">Our Mission</h3>
           <p className="text-lg text-gray-700 leading-relaxed mb-10">
-            At Hedera Donations, our mission is to revolutionize the way people
+            At ShibaAngels, our mission is to revolutionize the way people
             support meaningful causes by leveraging the power of blockchain
             technology. We are committed to fostering a culture of transparency,
             accountability, and empowerment. Through our platform, donors can
@@ -27,8 +27,8 @@ const InfoPage: React.FC = () => {
             We envision a world where technology bridges the gap between
             generosity and trust. By embracing decentralization, we aim to
             create a global community of donors and organizations united by the
-            shared goal of making a difference. Hedera Donations strives to be
-            the benchmark for ethical giving in the digital age.
+            shared goal of making a difference. ShibaAngels strives to be the
+            benchmark for ethical giving in the digital age.
           </p>
 
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
@@ -58,7 +58,7 @@ const InfoPage: React.FC = () => {
             How We Operate
           </h3>
           <p className="text-lg text-gray-700 leading-relaxed mb-10">
-            At Hedera Donations, we partner with trusted campaign organizers to
+            At ShibaAngels, we partner with trusted campaign organizers to
             present impactful causes. Every campaign undergoes a rigorous
             vetting process to ensure alignment with our core values of
             integrity, transparency, and community impact. Our platform
@@ -74,7 +74,7 @@ const InfoPage: React.FC = () => {
           </ul>
 
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
-            Why Choose Hedera Donations?
+            Why Choose ShibaAngels?
           </h3>
           <ul className="list-disc list-inside text-lg text-gray-700 mb-10">
             <li>
@@ -87,8 +87,8 @@ const InfoPage: React.FC = () => {
               reflect the collective values of our global community.
             </li>
             <li>
-              <strong>Innovation Meets Generosity:</strong> Hedera Donations
-              combines cutting-edge technology with a human-centered approach to
+              <strong>Innovation Meets Generosity:</strong> ShibaAngels combines
+              cutting-edge technology with a human-centered approach to
               philanthropy.
             </li>
           </ul>
@@ -98,7 +98,7 @@ const InfoPage: React.FC = () => {
           </h3>
           <p className="text-lg text-gray-700 leading-relaxed mb-10">
             In addition to our current offerings, we are dedicated to expanding
-            and enhancing Hedera Donations in the future. Our goals include:
+            and enhancing ShibaAngels in the future. Our goals include:
           </p>
           <ul className="list-disc list-inside text-lg text-gray-700">
             <li>

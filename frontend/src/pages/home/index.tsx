@@ -20,34 +20,35 @@ const HomePage: React.FC = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <NavigationBar />
-
       {/* Hero Section */}
       <section
-        className="relative text-white py-60"
+        className="relative text-white py-20 sm:py-40 md:py-60"
         style={{
           backgroundImage: 'url("/banner.png")',
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="container mx-auto text-center relative z-10">
-          <div className="bg-opacity-60 bg-green-600 rounded-xl inline-block px-10 py-8 shadow-lg mt-20">
-            <h2 className="text-5xl font-extrabold leading-tight text-white">
+        <div className="container mx-auto text-center relative z-10 px-4">
+          <div className="bg-green-600 bg-opacity-60 rounded-xl inline-block px-6 sm:px-10 py-6 sm:py-8 shadow-lg mt-10 md:mt-20">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
               Support Campaigns with Tokens
             </h2>
-            <p className="mt-4 text-lg text-white">
+            <p className="mt-4 text-base sm:text-lg md:text-xl">
               Explore top campaigns and make an impact with your donations.
             </p>
-            {!isAuthenticated ? (
+            {!isAuthenticated && (
               <button
-                className="mt-8 bg-yellow-400 text-blue-800 py-3 px-8 rounded-full font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
+                className="mt-8 bg-yellow-400 text-blue-800 py-3 px-6 sm:px-8 rounded-full font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
                 onClick={() => navigate(UrlMapping.login)}
               >
                 Connect Wallet
               </button>
-            ) : null}
+            )}
           </div>
         </div>
+        {/* Optional overlay */}
+        <div className="absolute inset-0 bg-black opacity-30"></div>
       </section>
 
       {/* Top Campaigns */}
