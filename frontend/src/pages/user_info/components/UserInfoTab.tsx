@@ -96,7 +96,7 @@ const UserInfoTab: React.FC = () => {
         loadingMessage="Loading user info..."
       >
         <>
-          <h2 className="text-3xl font-extrabold text-blue-800 mb-6 text-center">
+          <h2 className="text-2xl font-extrabold text-blue-800 mb-6 text-center">
             Hi, {formData.name}
           </h2>
           <form onSubmit={handleSubmit}>

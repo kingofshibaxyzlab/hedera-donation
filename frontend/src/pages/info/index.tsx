@@ -7,7 +7,7 @@ const InfoPage: React.FC = () => {
       <NavigationBar />
 
       <main className="container mx-auto py-16 px-6 md:px-20">
-        <h2 className="text-5xl font-bold text-blue-800 mb-12 text-center">
+        <h2 className="text-3xl font-bold text-blue-800 mb-12 text-center">
           About ShibaAngels
         </h2>
 

@@ -114,15 +114,15 @@ const CampaignDetailsPage: React.FC = () => {
           <section className="text-center mb-12">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="flex-1 mb-4 md:mb-0">
-                <h2 className="text-5xl font-bold text-blue-900 mb-2">
+                <h1 className="text-xl font-bold text-blue-800 mb-2">
                   {campaign?.title}
-                </h2>
-                <p className="text-lg text-gray-700">
+                </h1>
+                <nav className="text-lg text-gray-700">
                   Organized by: {campaign?.organizer?.username || "Unknown"}
-                </p>
+                </nav>
               </div>
               <span
-                className={`px-4 py-1 rounded-full text-lg font-medium ${getStatusBadgeClass(
+                className={`px-4 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass(
                   campaign?.status || ""
                 )}`}
               >
@@ -134,7 +134,7 @@ const CampaignDetailsPage: React.FC = () => {
           {/* Campaign Image */}
           <div className="relative mb-12">
             <img
-              src={campaign?.image || "https://via.placeholder.com/150"}
+              src={campaign?.image || "https://placehold.co/150x150"}
               alt="Campaign"
               className="w-full max-h-[80vh] rounded-2xl object-cover shadow-xl border p-4 bg-white"
             />
@@ -142,12 +142,12 @@ const CampaignDetailsPage: React.FC = () => {
 
           {/* Campaign Details */}
           <section className="bg-white rounded-2xl p-10 shadow-xl mb-16">
-            <h3 className="text-3xl font-bold text-blue-900 mb-6">Summary</h3>
+            <h3 className="text-xl font-bold text-blue-800 mb-2">Summary</h3>
             <p className="text-xl text-gray-800 leading-relaxed mb-8">
               {campaign?.summary}
             </p>
 
-            <h3 className="text-3xl font-bold text-blue-900 mb-6">
+            <h3 className="text-xl font-bold text-blue-800 mb-2">
               Description
             </h3>
             <div
@@ -156,10 +156,10 @@ const CampaignDetailsPage: React.FC = () => {
             />
 
             <div className="mb-6">
-              <h4 className="text-2xl font-bold text-blue-700">
+              <h4 className="text-xl font-bold text-blue-800 mb-2">
                 Created Transaction
               </h4>
-              <p className="text-lg text-gray-700 mt-2">
+              <p className="text-sm text-gray-700 mt-2">
                 {campaign?.transaction_hash_create ? (
                   <a
                     href={`${env.EXPLORER_SCAN}/transaction/${campaign.transaction_hash_create}`}
@@ -176,10 +176,10 @@ const CampaignDetailsPage: React.FC = () => {
             </div>
 
             <div className="mb-6">
-              <h4 className="text-2xl font-bold text-blue-700">
+              <h4 className="text-xl font-bold text-blue-800 mb-2">
                 Withdrawn Transaction
               </h4>
-              <p className="text-lg text-gray-700 mt-2">
+              <p className="text-sm text-gray-700 mt-2">
                 {campaign?.transaction_hash_withdrawn ? (
                   <a
                     href={`${env.EXPLORER_SCAN}/transaction/${campaign.transaction_hash_withdrawn}`}
@@ -198,19 +198,19 @@ const CampaignDetailsPage: React.FC = () => {
             </div>
 
             <div className="mb-6">
-              <h4 className="text-2xl font-bold text-blue-700">
+              <h4 className="text-xl font-bold text-blue-800 mb-2">
                 Campaign Type
               </h4>
-              <p className="text-lg text-gray-700 mt-2">
+              <p className="text-sm text-gray-700 mt-2">
                 {campaign?.campaign_type?.name}
               </p>
             </div>
 
             <div className="mb-6">
-              <h4 className="text-2xl font-bold text-blue-700">
+              <h4 className="text-xl font-bold text-blue-800 mb-2">
                 Donation Goal
               </h4>
-              <p className="text-lg text-gray-700 mt-2">
+              <p className="text-sm text-gray-700 mt-2">
                 Goal:{" "}
                 <strong>
                   {campaign?.current_amount && campaign?.token?.decimal
@@ -232,7 +232,7 @@ const CampaignDetailsPage: React.FC = () => {
             </div>
 
             <div className="mb-8">
-              <h4 className="text-2xl font-bold text-blue-700 mb-3">
+              <h4 className="text-xl font-bold text-blue-800 mb-2 mb-3">
                 Donation Progress
               </h4>
               <div className="flex items-center justify-center">
@@ -242,7 +242,7 @@ const CampaignDetailsPage: React.FC = () => {
                     style={{ width: `${campaign?.progress || 0}%` }}
                   ></div>
                 </div>
-                <span className="text-lg text-yellow-500 font-semibold min-w-fit text-center">
+                <span className="text-sm text-yellow-500 min-w-fit text-center">
                   {campaign?.progress}% funded
                 </span>
               </div>
@@ -250,7 +250,7 @@ const CampaignDetailsPage: React.FC = () => {
 
             {campaign?.video_link && (
               <div className="mb-6">
-                <h4 className="text-2xl font-bold text-blue-700">Video</h4>
+                <h4 className="text-xl font-bold text-blue-800 mb-2">Video</h4>
                 <p className="text-md text-blue-600 mt-2 underline">
                   <a
                     href={campaign.video_link}
@@ -265,7 +265,7 @@ const CampaignDetailsPage: React.FC = () => {
 
             {campaign?.project_url && (
               <div className="mb-6">
-                <h4 className="text-2xl font-bold text-blue-700">
+                <h4 className="text-xl font-bold text-blue-800 mb-2">
                   Project URL
                 </h4>
                 <p className="text-md text-blue-600 mt-2 underline">
@@ -281,8 +281,10 @@ const CampaignDetailsPage: React.FC = () => {
             )}
 
             <div className="mb-6">
-              <h4 className="text-2xl font-bold text-blue-700">Your Balance</h4>
-              <p className="text-lg text-gray-700 mt-2">
+              <h4 className="text-xl font-bold text-blue-800 mb-2">
+                Your Balance
+              </h4>
+              <p className="text-sm text-gray-700 mt-2">
                 <strong>
                   {campaign?.token?.decimal && balance
                     ? ethers.formatUnits(
@@ -300,7 +302,9 @@ const CampaignDetailsPage: React.FC = () => {
 
             {/* Donate Now Section */}
             <div className="mb-2">
-              <h4 className="text-2xl font-bold text-blue-700">Donate Now</h4>
+              <h4 className="text-xl font-bold text-blue-800 mb-2">
+                Donate Now
+              </h4>
               <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
                 <input
                   type="number"
@@ -360,7 +364,7 @@ const CampaignDetailsPage: React.FC = () => {
 
           {/* Donation History Section */}
           <section className="bg-white rounded-2xl p-8 shadow-xl mb-16">
-            <h3 className="text-3xl font-bold text-blue-900 mb-6">
+            <h3 className="text-xl font-bold text-blue-800 mb-2">
               Donation History
             </h3>
             {campaign?.token ? (
@@ -377,7 +381,7 @@ const CampaignDetailsPage: React.FC = () => {
 
           {/* Related Campaigns Section */}
           <section className="mt-16">
-            <h3 className="text-4xl font-bold text-blue-900 mb-12 text-center">
+            <h3 className="text-3xl font-bold text-blue-800 mb-12 text-center">
               Related Campaigns
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

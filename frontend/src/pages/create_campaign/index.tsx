@@ -105,7 +105,7 @@ const CreateCampaignPage: React.FC = () => {
       <NavigationBar />
       <div className="flex justify-center items-center flex-1 py-16 px-6">
         <div className="bg-white p-10 rounded-xl shadow-lg w-full max-w-3xl">
-          <h2 className="text-4xl font-bold text-blue-800 mb-8 text-center">
+          <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">
             Create a Campaign
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>

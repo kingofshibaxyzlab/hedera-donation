@@ -19,7 +19,7 @@ const DonationHistoryTab: React.FC = () => {
 
   return (
     <div className="bg-white p-8 rounded-3xl shadow-2xl">
-      <h2 className="text-3xl font-extrabold text-blue-800 mb-6 text-center">
+      <h2 className="text-2xl font-extrabold text-blue-800 mb-6 text-center">
         Donation History
       </h2>
       <DataLoader

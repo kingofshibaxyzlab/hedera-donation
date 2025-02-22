@@ -77,7 +77,7 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 via-gray-50 to-blue-50">
       <div className="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md">
-        <h2 className="text-3xl font-extrabold text-blue-800 mb-6 text-center">
+        <h2 className="text-2xl font-extrabold text-blue-800 mb-6 text-center">
           Welcome Back!
         </h2>
         <p className="text-sm text-gray-600 mb-6 text-center">

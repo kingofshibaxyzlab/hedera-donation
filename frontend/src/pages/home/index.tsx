@@ -35,10 +35,10 @@ const HomePage: React.FC = () => {
       >
         <div className="container mx-auto text-center relative z-10 px-4">
           <div className="bg-green-600 bg-opacity-60 rounded-xl inline-block px-6 sm:px-10 py-6 sm:py-8 shadow-lg mt-10 md:mt-20">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight">
               Support Campaigns with Tokens
             </h2>
-            <p className="mt-4 text-base sm:text-lg md:text-xl">
+            <p className="mt-4 text-sm sm:text-lg md:text-xl">
               Explore top campaigns and make an impact with your donations.
             </p>
             {!isAuthenticated && (
@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
         {/* Top Campaigns Section */}
         <section className="py-16 bg-gradient-to-b from-blue-50 to-white">
           <div className="container mx-auto">
-            <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
+            <h3 className="text-3xl font-bold text-blue-800 mb-12 text-center">
               Top Campaigns
             </h3>
             <DataLoader
@@ -84,9 +84,9 @@ const HomePage: React.FC = () => {
           <div className="w-full text-center mt-5">
             <Link
               to={UrlMapping.all_campaign}
-              className="text-2xl text-blue-500 hover:underline hover:text-blue-700 transition-colors duration-300"
+              className="text-lg text-blue-500 hover:underline hover:text-blue-600 transition-colors duration-300 underline"
             >
-              View All Campaigns
+              View All
             </Link>
           </div>
         </section>
@@ -94,7 +94,7 @@ const HomePage: React.FC = () => {
         {/* Top Donors Section */}
         <section className="py-16 bg-gradient-to-b from-white to-blue-50">
           <div className="container mx-auto">
-            <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
+            <h3 className="text-3xl font-bold text-blue-800 mb-12 text-center">
               Top Donors
             </h3>
             <DataLoader

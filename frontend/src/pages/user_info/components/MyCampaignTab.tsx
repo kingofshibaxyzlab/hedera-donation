@@ -38,7 +38,7 @@ const MyCampaignTab: React.FC = () => {
 
   return (
     <div className="bg-white p-6 rounded-3xl shadow-2xl">
-      <h2 className="text-3xl font-extrabold text-blue-800 mb-6 text-center">
+      <h2 className="text-2xl font-extrabold text-blue-800 mb-6 text-center">
         My Campaigns
       </h2>
       <DataLoader
