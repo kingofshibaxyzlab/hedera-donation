@@ -105,7 +105,8 @@ const LoginPage: React.FC = () => {
           >
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
-        ) : (
+        ) : null}
+        {walletAddress && isNonceLoading && (
           <Spinner message="Loading account ..." />
         )}
         <div className="mt-4 text-center">
