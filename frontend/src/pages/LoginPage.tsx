@@ -95,7 +95,7 @@ const LoginPage: React.FC = () => {
             ? `Connected: ${walletAddress}`
             : "Connect HashPack Wallet"}
         </button>
-        {walletAddress && dataNonce && !isNonceLoading ? (
+        {walletAddress && dataNonce && !isNonceLoading && (
           <button
             onClick={handleLogin}
             className={`w-full bg-yellow-500 text-blue-800 py-3 px-6 rounded-lg font-semibold shadow-md hover:bg-yellow-600 transition duration-300 ${
@@ -105,7 +105,7 @@ const LoginPage: React.FC = () => {
           >
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
-        ) : null}
+        )}
         {walletAddress && isNonceLoading && (
           <Spinner message="Loading account ..." />
         )}
