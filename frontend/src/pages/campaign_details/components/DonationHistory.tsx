@@ -105,7 +105,7 @@ const DonationHistory: React.FC<DonationHistoryProps> = ({
                 {allDonations.map((donation, index) => (
                   <div
                     key={index}
-                    className="p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4"
+                    className="p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
                   >
                     <img
                       src={
