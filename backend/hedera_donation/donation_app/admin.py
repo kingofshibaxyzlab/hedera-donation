@@ -13,7 +13,7 @@ class HederaUserAdmin(admin.ModelAdmin):
 @admin.register(Campaign)
 class CampaignAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'organizer', 'goal','current_amount', 'created_at', 'approved_by_admin', 'status',)
-    search_fields = ('title', 'description', 'organizer__username',)
+    search_fields = ('title', 'description', 'summary', 'organizer__username',)
     list_filter = ('campaign_type', 'created_at', 'approved_by_admin', 'status',)
     readonly_fields = ('onchain_id', 'percentage_completed', 'transaction_hash_create','transaction_hash_withdrawn',)
 

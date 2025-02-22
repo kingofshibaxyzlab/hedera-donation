@@ -15,16 +15,17 @@ import {
 } from "./request";
 import {
   ICampaign,
+  ICampaignCard,
   ICampaignDetailResponse,
-  ICampaignDonationHistory,
   ICampaignType,
   ICreateCampaignPayload,
   IDonationHistory,
   IToken,
-  ITopCampaign,
   ITopDonor,
   IUserInfo,
   IUserUpdatePayload,
+  PaginatedCampaignDonationHistoryResponse,
+  PaginatedCampaignsResponse,
 } from "./types";
 
 export const useUserInfo = createQuery<IUserInfo>({
@@ -32,9 +33,12 @@ export const useUserInfo = createQuery<IUserInfo>({
   fetcher: () => getUserInfo(),
 });
 
-export const useCampaigns = createQuery<ICampaign[]>({
+export const useCampaigns = createQuery<
+  PaginatedCampaignsResponse,
+  { page: number; per_page: number }
+>({
   queryKey: ["useCampaigns"],
-  fetcher: () => getCampaigns(),
+  fetcher: ({ page, per_page }) => getCampaigns(page, per_page),
   refetchInterval: 1000 * 3, // 3 seconds
 });
 
@@ -59,7 +63,7 @@ export const useTopDonors = createQuery<ITopDonor[]>({
   refetchInterval: 1000 * 3, // 3 seconds
 });
 
-export const useTopCampaigns = createQuery<ITopCampaign[]>({
+export const useTopCampaigns = createQuery<ICampaignCard[]>({
   queryKey: ["useTopCampaigns"],
   fetcher: () => getTopCampaigns(),
   refetchInterval: 1000 * 3, // 3 seconds
@@ -84,11 +88,12 @@ export const useUserCampaigns = createQuery<ICampaign[]>({
 });
 
 export const useDonationHistoryByCampaign = createQuery<
-  ICampaignDonationHistory[],
-  { campaignId: number }
+  PaginatedCampaignDonationHistoryResponse,
+  { campaignId: number; page: number; per_page: number }
 >({
   queryKey: ["useDonationHistoryByCampaign"],
-  fetcher: ({ campaignId }) => getDonationHistoryByCampaign(campaignId),
+  fetcher: ({ campaignId, page, per_page }) =>
+    getDonationHistoryByCampaign(campaignId, page, per_page),
   refetchInterval: 1000 * 3, // 3 seconds
 });
 

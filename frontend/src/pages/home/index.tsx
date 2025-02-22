@@ -1,25 +1,29 @@
 import { UrlMapping } from "@/commons/url-mapping.common";
+import CampaignCard from "@/components/card/CampaignCard";
+import DataLoader from "@/components/DataLoader";
 import Footer from "@/components/Footer";
 import NavigationBar from "@/components/NavBar";
-import { useTopCampaigns, useTopDonors } from "@/services/apis/core";
+import {
+  ICampaignCard,
+  useTopCampaigns,
+  useTopDonors,
+} from "@/services/apis/core";
 import { useAuthStore } from "@/services/stores/useAuthStore";
-import { getStatusBadgeClass } from "@/utils/colors";
-import { formatDistanceToNow } from "date-fns";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
-  // Fetch campaigns
-  const { data: campaigns, isLoading: isCampaignsLoading } = useTopCampaigns();
 
-  // Fetch top donors
+  // Fetch campaigns and donors
+  const { data: campaigns, isLoading: isCampaignsLoading } = useTopCampaigns();
   const { data: topDonors, isLoading: isDonorsLoading } = useTopDonors();
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <NavigationBar />
+
       {/* Hero Section */}
       <section
         className="relative text-white py-20 sm:py-40 md:py-60"
@@ -51,132 +55,88 @@ const HomePage: React.FC = () => {
         <div className="absolute inset-0 bg-black opacity-30"></div>
       </section>
 
-      {/* Top Campaigns */}
-      <section className="py-16 bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto">
-          <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
-            Top Campaigns
-          </h3>
-          {isCampaignsLoading ? (
-            <p className="text-center text-gray-500">Loading campaigns...</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              {(!campaigns || campaigns.length < 1) && (
-                <div className="col-span-full text-center text-gray-600">
-                  No campaigns available. Please check back later!
-                </div>
+      <main className="container mx-auto py-16 px-6 md:px-20 flex-1">
+        {/* Top Campaigns Section */}
+        <section className="py-16 bg-gradient-to-b from-blue-50 to-white">
+          <div className="container mx-auto">
+            <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
+              Top Campaigns
+            </h3>
+            <DataLoader
+              isLoading={isCampaignsLoading}
+              loadingMessage="Loading campaigns..."
+            >
+              {campaigns && campaigns.length > 0 ? (
+                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {campaigns.map((campaign: ICampaignCard) => (
+                    <CampaignCard key={campaign.id} campaign={campaign} />
+                  ))}
+                </section>
+              ) : (
+                !isCampaignsLoading && (
+                  <p className="text-center text-gray-600">
+                    No campaigns available. Please check back later!
+                  </p>
+                )
               )}
+            </DataLoader>
+          </div>
+          <div className="w-full text-center mt-5">
+            <Link
+              to={UrlMapping.all_campaign}
+              className="text-2xl text-blue-500 hover:underline hover:text-blue-700 transition-colors duration-300"
+            >
+              View All Campaigns
+            </Link>
+          </div>
+        </section>
 
-              {campaigns?.map((campaign) => (
-                <div
-                  key={campaign.id}
-                  className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition duration-300 flex flex-col"
-                >
-                  <img
-                    src={campaign.image || "https://via.placeholder.com/150"}
-                    alt={campaign.title}
-                    className="w-full h-56 object-cover"
-                  />
-                  <div className="p-6 flex flex-col flex-grow">
-                    <div className="flex justify-between items-center grow">
-                      <h4 className="text-2xl font-bold text-blue-700">
-                        {campaign.title}
-                      </h4>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass(
-                          campaign.status || ""
-                        )}`}
-                      >
-                        {campaign.status}
-                      </span>
-                    </div>
-                    <div className="mt-6">
-                      <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-                        <div
-                          className="bg-red-600 h-full"
-                          style={{ width: `${campaign.progress}%` }}
-                        ></div>
+        {/* Top Donors Section */}
+        <section className="py-16 bg-gradient-to-b from-white to-blue-50">
+          <div className="container mx-auto">
+            <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
+              Top Donors
+            </h3>
+            <DataLoader
+              isLoading={isDonorsLoading}
+              loadingMessage="Loading donors..."
+            >
+              {topDonors && topDonors.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+                  {topDonors.map((donor) => (
+                    <div
+                      key={donor.id}
+                      className="bg-white rounded-xl shadow-md p-6 flex items-center space-x-6 hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out min-w-fit"
+                    >
+                      <div className="w-16 h-16 flex-shrink-0 rounded-full bg-yellow-500 text-white flex items-center justify-center font-bold text-xl shadow">
+                        {donor.initials}
                       </div>
-                      <p className="text-sm text-gray-600 mt-2 transition-all duration-500 ease-in-out">
-                        {campaign.progress}% funded
-                      </p>
+                      <div>
+                        <h4 className="text-lg font-semibold text-blue-800">
+                          {donor.name} <span className="text-gray-500">|</span>{" "}
+                          {donor.username}
+                        </h4>
+                        <p className="text-gray-600 mt-1">
+                          Total Donations:{" "}
+                          <span className="font-medium">
+                            {donor.totalDonations}
+                          </span>
+                        </p>
+                      </div>
                     </div>
-
-                    <div className="flex justify-between items-center mt-5">
-                      <button
-                        onClick={() =>
-                          navigate(
-                            `${UrlMapping.campaign_detail}/${campaign.id}`
-                          )
-                        }
-                        className="bg-blue-600 text-white py-2 px-6 rounded-md font-medium hover:bg-blue-700 transition duration-300"
-                      >
-                        View Campaign
-                      </button>
-                      <nav className="text-green-500">
-                        Created:{" "}
-                        {campaign.date
-                          ? `${formatDistanceToNow(new Date(campaign.date), {
-                              addSuffix: true,
-                            })}`
-                          : "Unknown time ago"}
-                      </nav>
-                    </div>
+                  ))}
+                </div>
+              ) : (
+                !isDonorsLoading && (
+                  <div className="text-center text-gray-600">
+                    No donors yet. Be the first to donate!
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="w-full text-center mt-5">
-          <Link
-            to={UrlMapping.all_campaign}
-            className="text-2xl text-blue-500 hover:underline hover:text-blue-700 transition-colors duration-300"
-          >
-            View All Campaigns
-          </Link>
-        </div>
-      </section>
-
-      {/* Top Donors */}
-      <section className="py-16 bg-gradient-to-b from-white to-blue-50">
-        <div className="container mx-auto">
-          <h3 className="text-4xl font-bold text-blue-800 mb-12 text-center">
-            Top Donors
-          </h3>
-          {isDonorsLoading ? (
-            <p className="text-center text-gray-500">Loading donors...</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              {(!topDonors || topDonors.length < 1) && (
-                <div className="col-span-full text-center text-gray-600">
-                  No donors yet. Be the first to donate!
-                </div>
+                )
               )}
-
-              {topDonors?.map((donor) => (
-                <div
-                  key={donor.id}
-                  className="bg-white shadow-lg rounded-lg p-8 flex items-center space-x-6 hover:shadow-xl transition duration-300"
-                >
-                  <div className="min-w-16 min-h-16 rounded-full bg-yellow-400 text-white flex items-center justify-center font-bold text-2xl shadow-md">
-                    {donor.initials}
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-blue-700">
-                      {donor.name} | {donor.username}
-                    </h4>
-                    <p className="text-gray-600">
-                      Total Donations: {donor.totalDonations}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
+            </DataLoader>
+          </div>
+        </section>
+      </main>
       <Footer />
     </div>
   );

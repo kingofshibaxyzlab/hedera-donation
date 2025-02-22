@@ -35,7 +35,6 @@ export interface Donation {
 export interface Campaign {
     id: number;
     title: string;
-    description: string;
     image: string | null;
     goal: number;
     current_amount: number;
@@ -65,7 +64,6 @@ export interface DonationUpsert {
 export interface ApprovedCampaignJoin {
     id: number;
     title: string;
-    description: string;
     image: string | null;
     goal: number;
     current_amount: number;

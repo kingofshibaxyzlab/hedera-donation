@@ -49,6 +49,7 @@ class Campaign(models.Model):
     ]
 
     title = models.CharField(max_length=255)
+    summary =  models.CharField(max_length=500, null=True)
     description = models.TextField()
     image = models.CharField(blank=True, null=True, default="https://placehold.co/150x150")
     goal = models.DecimalField(max_digits=40, decimal_places=2)

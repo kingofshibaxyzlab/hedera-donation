@@ -1,16 +1,18 @@
 import api from "../api";
 import {
   ICampaign,
+  ICampaignCard,
   ICampaignDetailResponse,
   ICampaignDonationHistory,
   ICampaignType,
   ICreateCampaignPayload,
   IDonationHistory,
   IToken,
-  ITopCampaign,
   ITopDonor,
   IUserInfo,
   IUserUpdatePayload,
+  PaginatedCampaignDonationHistoryResponse,
+  PaginatedCampaignsResponse,
 } from "./types";
 
 // Fetch user info
@@ -19,9 +21,13 @@ export const getUserInfo = async (): Promise<IUserInfo> => {
   return response.data;
 };
 
-// Fetch campaigns
-export const getCampaigns = async (): Promise<ICampaign[]> => {
-  const response = await api.get<ICampaign[]>("/campaigns");
+export const getCampaigns = async (
+  page: number = 1,
+  per_page: number = 10
+): Promise<PaginatedCampaignsResponse> => {
+  const response = await api.get<PaginatedCampaignsResponse>("/campaigns", {
+    params: { page, per_page },
+  });
   return response.data;
 };
 
@@ -40,8 +46,8 @@ export const getDonationHistory = async (): Promise<IDonationHistory[]> => {
 };
 
 // Fetch top campaigns
-export const getTopCampaigns = async (): Promise<ITopCampaign[]> => {
-  const response = await api.get<ITopCampaign[]>("/top-campaigns");
+export const getTopCampaigns = async (): Promise<ICampaignCard[]> => {
+  const response = await api.get<ICampaignCard[]>("/top-campaigns");
   return response.data;
 };
 
@@ -70,10 +76,13 @@ export const getUserCampaigns = async (): Promise<ICampaign[]> => {
 
 // Fetch donation history by campaign
 export const getDonationHistoryByCampaign = async (
-  campaignId: number
-): Promise<ICampaignDonationHistory[]> => {
-  const response = await api.get<ICampaignDonationHistory[]>(
-    `/campaigns/${campaignId}/donations`
+  campaignId: number,
+  page: number = 1,
+  per_page: number = 10
+): Promise<PaginatedCampaignDonationHistoryResponse> => {
+  const response = await api.get<PaginatedCampaignDonationHistoryResponse>(
+    `/campaigns/${campaignId}/donations`,
+    { params: { page, per_page } }
   );
   return response.data;
 };

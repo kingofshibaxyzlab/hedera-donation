@@ -4,6 +4,7 @@ import {
   AccountId,
   ContractExecuteTransaction,
   ContractFunctionParameters,
+  Long,
   Signer,
 } from "@hashgraph/sdk";
 import { useState } from "react";
@@ -13,7 +14,7 @@ interface UseTokenMintResult {
     contractId: string,
     tokenId: number,
     recipient: string,
-    amount: number,
+    amount: string,
     gasLimit?: number
   ) => Promise<void>;
   error: string | null;
@@ -33,7 +34,7 @@ export const useTokenMint = (): UseTokenMintResult => {
     contractId: string,
     tokenId: number,
     recipient: string,
-    amount: number,
+    amount: string,
     gasLimit: number = 200_000
   ) => {
     if (!walletAddress) {
@@ -59,7 +60,7 @@ export const useTokenMint = (): UseTokenMintResult => {
           new ContractFunctionParameters()
             .addUint256(tokenId)
             .addAddress(evmAddress)
-            .addUint256(amount)
+            .addUint256(Long.fromString(amount))
         )
         .freezeWithSigner(signer);
 

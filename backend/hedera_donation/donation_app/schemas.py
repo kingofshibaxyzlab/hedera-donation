@@ -1,6 +1,8 @@
-from typing import List, Optional
-from ninja import Schema
 from pydantic import field_validator
+from typing import Generic, TypeVar, List, Optional
+from ninja import Schema
+
+T = TypeVar("T")
 
 
 class UserSchema(Schema):
@@ -20,11 +22,13 @@ class TokenSchema(Schema):
     symbol: str
     address: str
     account_id: Optional[str] = None
+    decimal: int
 
 
 class CampaignSchema(Schema):
     id: int
     title: Optional[str] = None
+    summary: Optional[str] = None
     description: Optional[str] = None
     image: Optional[str] = None
     goal: float
@@ -44,8 +48,34 @@ class CampaignSchema(Schema):
     transaction_hash_withdrawn: Optional[str] = None
 
 
+class CampaignCardSchema(Schema):
+    id: int
+    title: Optional[str] = None
+    summary: Optional[str] = None
+    image: Optional[str] = None
+    goal: float
+    current_amount: float
+    progress: float
+    organizer: UserSchema
+    campaign_type: Optional[CampaignTypeSchema] = None
+    token: Optional[TokenSchema] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+    status: Optional[str] = None
+
+
+class ResponsePaginationSchema(Schema, Generic[T]):
+    data: List[T]
+    page: int
+    page_size: int
+    total_pages: int
+    total_items: int
+    has_next: bool
+    has_previous: bool
+
 class CampaignCreateSchema(Schema):
     title: str
+    summary: str
     description: str
     image: str = None
     goal: float
@@ -53,7 +83,6 @@ class CampaignCreateSchema(Schema):
     token_id: int = None
     video_link: str = None
     project_url: str = None
-
 
 class CampaignTypeSchema(Schema):
     id: int
@@ -68,29 +97,6 @@ class TopDonorSchema(Schema):
     initials: str
 
 
-class TopCampaignSchema(Schema):
-    id: int
-    title: str
-    description: str
-    image: str
-    progress: float
-    status: str
-    date: str
-
-
-class CampaignListSchema(Schema):
-    id: int
-    title: str
-    description: str
-    image: str
-    progress: float
-
-
-class PaginatedCampaignsSchema(Schema):
-    current_page: int
-    total_pages: int
-    campaigns: List[CampaignListSchema]
-
 
 class UserUpdateSchema(Schema):
     name: str
@@ -101,6 +107,7 @@ class UserUpdateSchema(Schema):
 
 
 class UserInfoSchema(Schema):
+    username: str
     name: Optional[str] = None
     wallet_address: Optional[str] = None
     facebook: Optional[str] = None
@@ -113,12 +120,14 @@ class DonationHistorySchema(Schema):
     campaign_id: int
     campaign_title: str
     campaign_image: Optional[str] = None
+    token: Optional[TokenSchema] = None
     amount: float
     date: str
-    transaction_hash:Optional[str] = None
+    transaction_hash: Optional[str] = None
 
 
 class CampaignDonationHistorySchema(Schema):
+    id: int
     campaign_id: int
     campaign_title: str
     campaign_image: Optional[str]
@@ -129,22 +138,11 @@ class CampaignDonationHistorySchema(Schema):
     amount: float
     date: str
     transaction_hash: Optional[str]
-
-
-
-class RelatedCampaignSchema(Schema):
-    id: int
-    title: str
-    description: str
-    image: str
-    progress: float
-
+    token: Optional[TokenSchema] = None
 
 class CampaignDetailResponseSchema(Schema):
     campaign: CampaignSchema
-    related_campaigns: List[RelatedCampaignSchema]
-
-
+    related_campaigns: List[CampaignCardSchema]
 
 class LoginSchema(Schema):
     wallet_address: str
@@ -163,7 +161,6 @@ class LoginSchema(Schema):
         if not value or not value.strip():
             raise ValueError("signature must not be empty")
         return value
-
 
 class LoginResponseSchema(Schema):
     token: str

@@ -1,21 +1,49 @@
 import Footer from "@/components/Footer";
 import NavigationBar from "@/components/NavBar";
+import env from "@/env";
 import { useUploadFile } from "@/services/apis/auth";
 import {
   useCampaignTypes,
   useCreateCampaign,
   useTokens,
 } from "@/services/apis/core";
-import React, { useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+interface FormValues {
+  title: string;
+  campaign_type_id: string;
+  summary: string;
+  description: string;
+  token_id: string;
+  goal: number;
+  video_link?: string;
+  project_url?: string;
+  image?: string;
+}
 
 const CreateCampaignPage: React.FC = () => {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: "",
+      campaign_type_id: "",
+      summary: "",
+      description: "",
+      token_id: "",
+      goal: 0,
+      video_link: "",
+      project_url: "",
+    },
+  });
+
   const { data: campaignTypes, isLoading: isTypesLoading } = useCampaignTypes();
   const { data: tokens, isLoading: isTokensLoading } = useTokens();
   const { mutate: createCampaign, isPending } = useCreateCampaign();
@@ -23,6 +51,19 @@ const CreateCampaignPage: React.FC = () => {
     useUploadFile();
 
   const [uploadedImage, setUploadedImage] = useState<string>("");
+  const [descriptionValue, setDescriptionValue] = useState<string>("");
+
+  useEffect(() => {
+    if (campaignTypes && campaignTypes.length > 0) {
+      setValue("campaign_type_id", String(campaignTypes[0].id));
+    }
+  }, [campaignTypes, setValue]);
+
+  useEffect(() => {
+    if (tokens && tokens.length > 0) {
+      setValue("token_id", String(tokens[0].id));
+    }
+  }, [tokens, setValue]);
 
   const handleImageUpload = (file: File) => {
     const uploadData = new FormData();
@@ -31,25 +72,30 @@ const CreateCampaignPage: React.FC = () => {
     uploadFile(uploadData, {
       onSuccess: (data) => {
         setUploadedImage(`${data.file_url}`);
+        toast.success("Image uploaded successfully!");
       },
       onError: (error: any) => {
-        alert(`Error uploading image: ${error.message}`);
+        toast.error(`Error uploading image: ${error.message}`);
       },
     });
   };
 
-  const onSubmit = (data: any) => {
-    data.image = uploadedImage; // Set uploaded image URL
-    data.campaign_type_id = Number(data.campaign_type_id);
-    data.token_id = Number(data.token_id);
-    createCampaign(data, {
+  const onSubmit = (data: FormValues) => {
+    const payload = {
+      ...data,
+      image: uploadedImage,
+      goal: Number(data.goal),
+      description: descriptionValue,
+    };
+    createCampaign(payload, {
       onSuccess: () => {
-        alert("Campaign created successfully!");
+        toast.success("Campaign created successfully!");
         reset();
-        setUploadedImage(""); // Reset uploaded image
+        setUploadedImage("");
+        setDescriptionValue("");
       },
       onError: (error) => {
-        alert(`Error creating campaign: ${error.message}`);
+        toast.error(`Error creating campaign: ${error.message}`);
       },
     });
   };
@@ -66,7 +112,7 @@ const CreateCampaignPage: React.FC = () => {
             {/* Campaign Title */}
             <div className="mb-6">
               <label className="block text-lg font-medium text-gray-700">
-                Campaign Title
+                Title
               </label>
               <input
                 type="text"
@@ -76,15 +122,15 @@ const CreateCampaignPage: React.FC = () => {
                   required: "Campaign title is required",
                 })}
               />
-              {errors.title?.message && (
-                <p className="text-red-500">{String(errors.title.message)}</p>
+              {errors.title && (
+                <p className="text-red-500">{errors.title.message}</p>
               )}
             </div>
 
             {/* Campaign Type */}
             <div className="mb-6">
               <label className="block text-lg font-medium text-gray-700">
-                Campaign Type
+                Type
               </label>
               <select
                 className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -102,31 +148,50 @@ const CreateCampaignPage: React.FC = () => {
                   </option>
                 ))}
               </select>
-              {errors.campaign_type_id?.message && (
+              {errors.campaign_type_id && (
                 <p className="text-red-500">
-                  {String(errors.campaign_type_id.message)}
+                  {errors.campaign_type_id.message}
                 </p>
               )}
             </div>
 
-            {/* Campaign Description */}
+            {/* Campaign Summary */}
             <div className="mb-6">
               <label className="block text-lg font-medium text-gray-700">
-                Description
+                Summary
               </label>
               <textarea
                 className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-                placeholder="Describe your campaign"
-                rows={5}
-                {...register("description", {
-                  required: "Description is required",
+                placeholder="Provide a short summary of your campaign"
+                rows={3}
+                {...register("summary", {
+                  required: "Summary is required",
                 })}
               ></textarea>
-              {errors.description?.message && (
-                <p className="text-red-500">
-                  {String(errors.description.message)}
-                </p>
+              {errors.summary && (
+                <p className="text-red-500">{errors.summary.message}</p>
               )}
+            </div>
+
+            {/* Campaign Description using TinyMCE Editor */}
+            <div className="mb-6">
+              <label className="block text-lg font-medium text-gray-700 mb-2">
+                Description
+              </label>
+              <Editor
+                apiKey={env.TINYMCE_API_KEY}
+                value={descriptionValue}
+                init={{
+                  branding: false,
+                  height: 300,
+                  menubar: false,
+                  plugins:
+                    "link image media table codesample fullscreen preview code lists",
+                  toolbar:
+                    "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image media | fullscreen preview code",
+                }}
+                onEditorChange={(content) => setDescriptionValue(content)}
+              />
             </div>
 
             {/* Donation Goal */}
@@ -160,20 +225,18 @@ const CreateCampaignPage: React.FC = () => {
                   {...register("goal", { required: "Goal amount is required" })}
                 />
               </div>
-              {errors.token_id?.message && (
-                <p className="text-red-500">
-                  {String(errors.token_id.message)}
-                </p>
+              {errors.token_id && (
+                <p className="text-red-500">{errors.token_id.message}</p>
               )}
-              {errors.goal?.message && (
-                <p className="text-red-500">{String(errors.goal.message)}</p>
+              {errors.goal && (
+                <p className="text-red-500">{errors.goal.message}</p>
               )}
             </div>
 
             {/* Campaign Image */}
             <div className="mb-6">
               <label className="block text-lg font-medium text-gray-700">
-                Campaign Image
+                Image
               </label>
               <input
                 type="file"
@@ -200,9 +263,6 @@ const CreateCampaignPage: React.FC = () => {
                     <h4 className="text-lg font-medium text-gray-700">
                       Preview:
                     </h4>
-                    <p className="text-green-500 mt-2">
-                      Image uploaded successfully!
-                    </p>
                     <img
                       src={uploadedImage}
                       alt="Uploaded Preview"
@@ -216,7 +276,7 @@ const CreateCampaignPage: React.FC = () => {
             {/* Campaign Video Link */}
             <div className="mb-6">
               <label className="block text-lg font-medium text-gray-700">
-                Campaign Video Link (Optional)
+                Video Link (Optional)
               </label>
               <input
                 type="url"

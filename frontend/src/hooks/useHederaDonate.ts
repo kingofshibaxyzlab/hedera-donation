@@ -3,6 +3,7 @@ import {
   AccountId,
   ContractExecuteTransaction,
   ContractFunctionParameters,
+  Long,
   Signer,
 } from "@hashgraph/sdk";
 import { useState } from "react";
@@ -11,7 +12,7 @@ interface UseHederaDonateResult {
   donate: (
     contractId: string,
     campaignId: number,
-    amount: number,
+    amount: string,
     gasLimit?: number
   ) => void;
   error: string | null;
@@ -30,7 +31,7 @@ export const useHederaDonate = (): UseHederaDonateResult => {
   const donate = async (
     contractId: string,
     campaignId: number,
-    amount: number,
+    amount: string,
     gasLimit: number = 200_000
   ) => {
     if (!walletAddress) {
@@ -55,7 +56,7 @@ export const useHederaDonate = (): UseHederaDonateResult => {
           "donate",
           new ContractFunctionParameters()
             .addUint256(campaignId) // Campaign ID
-            .addUint256(amount) // Donation amount
+            .addUint256(Long.fromString(amount)) // Donation amount
         )
         .freezeWithSigner(signer);
 

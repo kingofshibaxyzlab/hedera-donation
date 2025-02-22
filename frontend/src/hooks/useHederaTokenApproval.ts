@@ -3,6 +3,7 @@ import env from "@/env";
 import {
   AccountAllowanceApproveTransaction,
   AccountId,
+  Long,
   TokenAssociateTransaction,
   TokenId,
 } from "@hashgraph/sdk";
@@ -14,7 +15,7 @@ interface UseHederaTokenApprovalResult {
   checkAndApproveToken: (
     tokenAddress: string,
     spenderAddress: string,
-    amount: number
+    amount: string
   ) => Promise<boolean>;
   error: string | null;
   loading: boolean;
@@ -28,7 +29,7 @@ export const useHederaTokenApproval = (): UseHederaTokenApprovalResult => {
   const checkAndApproveToken = async (
     tokenAddress: string,
     spenderAddress: string,
-    amount: number
+    amount: string
   ): Promise<boolean> => {
     if (!walletAddress) {
       setError("Wallet is not connected.");
@@ -115,7 +116,7 @@ export const useHederaTokenApproval = (): UseHederaTokenApprovalResult => {
     accountId: string,
     tokenId: TokenId,
     spenderAccountId: AccountId,
-    amount: number
+    amount: string
   ): Promise<boolean> => {
     const allowanceUrl = `${env.MIRROR_NODE}/api/v1/accounts/${accountId}/allowances/tokens?limit=1000000`;
     const { data } = await axios.get(allowanceUrl);
@@ -137,10 +138,15 @@ export const useHederaTokenApproval = (): UseHederaTokenApprovalResult => {
     tokenId: TokenId,
     ownerAccountId: AccountId,
     spenderAccountId: AccountId,
-    amount: number
+    amount: string
   ): Promise<void> => {
     const transaction = await new AccountAllowanceApproveTransaction()
-      .approveTokenAllowance(tokenId, ownerAccountId, spenderAccountId, amount)
+      .approveTokenAllowance(
+        tokenId,
+        ownerAccountId,
+        spenderAccountId,
+        Long.fromString(amount)
+      )
       .freezeWithSigner(signer);
 
     const response = await transaction.executeWithSigner(signer);

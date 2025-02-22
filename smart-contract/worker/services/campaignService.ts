@@ -11,7 +11,6 @@ export const getApprovedCampaignJoins = async (): Promise<ApprovedCampaignJoin[]
       SELECT 
         c.id,
         c.title,
-        c.description,
         c.image,
         c.goal,
         c.current_amount,

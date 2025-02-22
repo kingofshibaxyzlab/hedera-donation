@@ -11,7 +11,7 @@ interface UseTokenBalanceResult {
 }
 
 export const useTokenBalance = (): UseTokenBalanceResult => {
-  const [balance, setBalance] = useState<number | null>(null);
+  const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

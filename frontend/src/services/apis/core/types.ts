@@ -6,6 +6,7 @@ export enum CampaignStatus {
 }
 
 export interface IUserInfo {
+  username: string;
   name: string;
   wallet_address: string;
   facebook?: string;
@@ -32,6 +33,7 @@ export interface IToken {
   symbol: string;
   address: string;
   account_id: string | null;
+  decimal: number;
 }
 export interface Organizer {
   id: number;
@@ -43,6 +45,7 @@ export interface Organizer {
 export interface ICampaign {
   id: number;
   title: string;
+  summary: string;
   description: string;
   image: string | null;
   goal: number;
@@ -62,34 +65,41 @@ export interface ICampaign {
   transaction_hash_withdrawn: string | null;
 }
 
-// Campaign detail type for a single campaign with additional fields
-
-// Related campaign type for the related campaigns list
-export interface IRelatedCampaign {
+// Core campaign type used for listings
+export interface ICampaignCard {
   id: number;
   title: string;
-  description: string;
-  image: string;
-  progress: number; // Percentage completed
-  date: string; // Percentage completed
+  summary: string;
+  image: string | null;
+  goal: number;
+  current_amount: number;
+  progress: number;
+  organizer: Organizer;
+  campaign_type: ICampaignType | null;
+  token: IToken | null;
+  created_at: string;
+  updated_at: string;
+  status: CampaignStatus | null;
 }
 
 // Full campaign details response schema from the backend
 export interface ICampaignDetailResponse {
   campaign: ICampaign;
-  related_campaigns: IRelatedCampaign[];
+  related_campaigns: ICampaignCard[];
 }
 
 export interface IDonationHistory {
   campaign_id: number;
   campaign_title: string;
   campaign_image?: string;
+  token?: IToken;
   amount: number;
   date: string;
-  transaction_hash: string;
+  transaction_hash?: string;
 }
 
 export interface ICampaignDonationHistory {
+  id: number;
   campaign_id: number;
   campaign_title: string;
   campaign_image: string;
@@ -99,6 +109,7 @@ export interface ICampaignDonationHistory {
   user_image: string;
   amount: number;
   date: string;
+  token?: IToken;
   transaction_hash: string;
 }
 
@@ -110,18 +121,9 @@ export interface ITopDonor {
   initials: string;
 }
 
-export interface ITopCampaign {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  progress: number;
-  status: CampaignStatus | null;
-  date: string;
-}
-
 export interface ICreateCampaignPayload {
   title: string;
+  summary: string;
   description: string;
   goal: number;
   campaign_type_id?: string;
@@ -129,4 +131,24 @@ export interface ICreateCampaignPayload {
   image?: string;
   video_link?: string;
   project_url?: string;
+}
+
+export interface PaginatedCampaignsResponse {
+  data: ICampaignCard[];
+  page: number;
+  page_size: number;
+  total_pages: number;
+  total_items: number;
+  has_next: boolean;
+  has_previous: boolean;
+}
+
+export interface PaginatedCampaignDonationHistoryResponse {
+  data: ICampaignDonationHistory[];
+  page: number;
+  page_size: number;
+  total_pages: number;
+  total_items: number;
+  has_next: boolean;
+  has_previous: boolean;
 }

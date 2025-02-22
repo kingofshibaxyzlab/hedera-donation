@@ -45,7 +45,7 @@ const FaucetTokenPage: React.FC = () => {
       const isApproved = await checkAndApproveToken(
         token.evmAddress || "",
         contractId,
-        amount
+        amount.toString()
       );
 
       if (isApproved) {
@@ -54,7 +54,7 @@ const FaucetTokenPage: React.FC = () => {
           contractId,
           Number(selectedToken),
           walletAddress,
-          Number(amount)
+          amount.toString()
         );
       } else {
         alert("Token allowance approval failed.");

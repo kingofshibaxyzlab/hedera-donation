@@ -12,32 +12,25 @@ interface AuthState {
   login: (response: IResponseAuthLogin) => Promise<void>;
   logout: () => void;
   getWalletAddress: () => string;
+  setUser: (user: IUserInfo | null) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: !!localStorage.getItem(keyValue.accessToken),
-  ref_url: "",
   user: JSON.parse(localStorage.getItem(keyValue.user) || "null"),
   login: async (response: IResponseAuthLogin) => {
     try {
       localStorage.setItem(keyValue.accessToken, response.token);
-      localStorage.setItem(
-        keyValue.user,
-        JSON.stringify({
-          username: response.username,
-          wallet_address: response.wallet_address,
-          image: response.image,
-          name: response.name,
-        })
-      );
+      const userData = {
+        username: response.username,
+        wallet_address: response.wallet_address,
+        image: response.image,
+        name: response.name,
+      };
+      localStorage.setItem(keyValue.user, JSON.stringify(userData));
       set({
         isAuthenticated: true,
-        user: {
-          username: response.username,
-          wallet_address: response.wallet_address,
-          image: response.image,
-          name: response.name,
-        },
+        user: userData,
       });
     } catch (error) {
       console.error("Login failed:", error);
@@ -53,5 +46,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   getWalletAddress: () => {
     const user = get().user;
     return user?.wallet_address || "Unknown";
+  },
+  setUser: (user: IUserInfo | null) => {
+    if (user) {
+      localStorage.setItem(keyValue.user, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(keyValue.user);
+    }
+    set({ user });
   },
 }));

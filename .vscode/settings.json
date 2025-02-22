@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "hashconnect"
+    ],
+    "python.analysis.extraPaths": [
+        "./backend/hedera_donation"
     ]
 }

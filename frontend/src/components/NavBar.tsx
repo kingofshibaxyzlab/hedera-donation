@@ -41,17 +41,20 @@ const NavigationBar = () => {
       }`}
       style={{ position: "sticky", top: 0 }}
     >
-      <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center py-4 px-6">
+      <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center py-4 px-6 min-w-fit">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src={DonationLogo}
-            alt="Logo"
-            className="w-12 h-12 rounded-full shadow-md"
-          />
-          <h1 className="text-2xl font-bold text-white tracking-wide">
-            ShibaAngels
-          </h1>
+        <div className="flex flex-row justify-between items-center w-full md:w-auto">
+          {" "}
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={DonationLogo}
+              alt="Logo"
+              className="w-12 h-12 rounded-full shadow-md"
+            />
+            <h1 className="text-2xl font-bold text-white tracking-wide">
+              ShibaAngels
+            </h1>
+          </Link>
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden ml-auto" onClick={toggleMenu}>
             {isMenuOpen ? (
@@ -60,13 +63,13 @@ const NavigationBar = () => {
               <AiOutlineMenu className="text-white w-8 h-8 cursor-pointer transition-transform duration-300 transform hover:scale-110" />
             )}
           </div>
-        </Link>
+        </div>
 
         {/* Navigation Links */}
         <nav
           className={`${
             isMenuOpen ? "flex flex-col" : "hidden lg:flex"
-          } lg:flex-row lg:space-x-6 items-center w-full lg:w-auto`}
+          } lg:flex-row lg:space-x-6 items-center w-full lg:w-auto min-w-fit`}
         >
           {[
             { label: "Home", path: UrlMapping.home },
@@ -98,7 +101,7 @@ const NavigationBar = () => {
               {/* Create Campaign Button */}
               <Link
                 to={UrlMapping.create_campaign || "#"}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-5 rounded-full font-medium shadow-lg transition duration-300 w-full lg:w-auto text-center"
+                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-full font-medium shadow-lg transition duration-300 w-full lg:w-auto text-center min-w-fit"
               >
                 Create Campaign
               </Link>
@@ -111,7 +114,7 @@ const NavigationBar = () => {
                 <img
                   src={userImage}
                   alt="User Icon"
-                  className="w-12 h-12 rounded-full border-2 border-white shadow-md"
+                  className="size-12 rounded-full border-2 border-white shadow-md min-h-12 min-w-12"
                 />
                 <span className="text-white font-medium hidden sm:inline-block">
                   {walletAddress}
@@ -121,7 +124,7 @@ const NavigationBar = () => {
               {/* Disconnect Button */}
               <button
                 onClick={handleDisconnect}
-                className="bg-red-600 text-white py-2 px-5 rounded-full font-medium shadow-md hover:bg-red-700 transition duration-300 w-full lg:w-auto"
+                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full font-medium shadow-lg transition duration-300 w-full lg:w-auto text-center min-w-fit"
               >
                 Disconnect
               </button>

@@ -1,9 +1,11 @@
 import { UrlMapping } from "@/commons/url-mapping.common";
+import Spinner from "@/components/spinner/Spinner";
 import { useHashConnectContext } from "@/contexts/hashconnect";
 import { useLogin, useNonce } from "@/services/apis/auth";
 import { useAuthStore } from "@/services/stores/useAuthStore";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const LoginPage: React.FC = () => {
   const { mutate: loginMutate, isPending: isLoggingIn } = useLogin();
@@ -15,10 +17,11 @@ const LoginPage: React.FC = () => {
     variables: { walletAddress: walletAddress || "" },
     enabled: Boolean(walletAddress),
   });
+
   const handleLogin = async () => {
     const nonce = dataNonce?.nonce;
     if (!walletAddress || !nonce) {
-      alert("Please connect your wallet first.");
+      toast.error("Please connect your wallet first.");
       return;
     }
     const signatureArray = await sign(nonce);
@@ -32,11 +35,11 @@ const LoginPage: React.FC = () => {
             login(data);
             navigate(UrlMapping.home);
           } catch (error) {
-            alert("Error setting authentication.");
+            toast.error("Error setting authentication.");
           }
         },
         onError: (error: any) => {
-          alert(
+          toast.error(
             `Login failed: ${error.response?.data?.message || error.message}`
           );
         },
@@ -59,7 +62,7 @@ const LoginPage: React.FC = () => {
 
   const sign = async (message: string) => {
     if (!walletAddress || !signData) {
-      alert("Please connect your wallet first.");
+      toast.error("Please connect your wallet first.");
       return;
     }
     const prefixedMessage = prefixMessageToSign(message);
@@ -67,9 +70,10 @@ const LoginPage: React.FC = () => {
       return await signData(prefixedMessage);
     } catch (error) {
       console.error("Signing failed", error);
-      alert("Signing failed, please try again.");
+      toast.error("Signing failed, please try again.");
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 via-gray-50 to-blue-50">
       <div className="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md">
@@ -91,7 +95,7 @@ const LoginPage: React.FC = () => {
             ? `Connected: ${walletAddress}`
             : "Connect HashPack Wallet"}
         </button>
-        {walletAddress && dataNonce && !isNonceLoading && (
+        {walletAddress && dataNonce && !isNonceLoading ? (
           <button
             onClick={handleLogin}
             className={`w-full bg-yellow-500 text-blue-800 py-3 px-6 rounded-lg font-semibold shadow-md hover:bg-yellow-600 transition duration-300 ${
@@ -101,6 +105,8 @@ const LoginPage: React.FC = () => {
           >
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
+        ) : (
+          <Spinner message="Loading account ..." />
         )}
         <div className="mt-4 text-center">
           <span
