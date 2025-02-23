@@ -10,15 +10,15 @@ from donation_app.helper import (
     serialize_campaign_card,
     serialize_donation,
 )
-from django.conf import settings
 from django.core.cache import cache
-from django.core.files.storage import default_storage
 from django.db.models import Sum
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI, File
 from ninja.errors import HttpError
 from ninja.files import UploadedFile as NinjaUploadedFile
+
+from donation_app.storage import generate_presigned_get_url, generate_presigned_post
 
 from .models import Campaign, CampaignType, Donation, Token, HederaUser
 from .schemas import (
@@ -37,6 +37,9 @@ from .schemas import (
     UserUpdateSchema,
     AuthNonce,
     CampaignCardSchema,
+    PresignedPostSchema,
+    PresignRequestSchema,
+    PresignedGetURLSchema
 )
 
 api = NinjaAPI()
@@ -350,27 +353,26 @@ def list_tokens(request):
         cache.set(cache_key, data, CACHE_TIMEOUT)
     return data
 
-# File Management APIs
-@api.post("/upload-file", tags=["File Management"])
-def upload_file(request, file: NinjaUploadedFile = File(...)):
-    DOMAIN_MEDIA_ROOT = settings.DOMAIN_MEDIA_ROOT
+@api.post("/generate-presigned-post", tags=["File Management"], response=PresignedPostSchema)
+def api_generate_presigned_post(request, payload: PresignRequestSchema):
+    EXPIRATION = 600
+    key = payload.key
+    file_name = os.path.splitext(key)[0]
+    file_extension = os.path.splitext(key)[1]
+    unique_file_name = f"{uuid.uuid4().hex}_{file_name}{file_extension}"
+    
     try:
-        file_extension = os.path.splitext(file.name)[1]
-        unique_file_name = f"{uuid.uuid4().hex}{file_extension}"
-        file_name = default_storage.save(unique_file_name, file)
-        file_url = f"{DOMAIN_MEDIA_ROOT}/{file_name}"
-        return {"message": "File uploaded successfully", "file_name": file_name, "file_url": file_url}
+        post_data = generate_presigned_post(unique_file_name, "private", EXPIRATION)
+        return post_data
     except Exception as e:
-        raise HttpError(400, f"Error uploading file: {str(e)}")
-
-
-@api.get("/read-file/{file_name}", tags=["File Management"])
-def read_file(request, file_name: str):
-    file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-    if not default_storage.exists(file_path):
-        raise HttpError(404, "File not found")
+        raise HttpError(400, str(e))
+    
+@api.post("/generate-presigned-get-url", tags=["File Management"], response=PresignedGetURLSchema)
+def api_generate_presigned_get_url(request, payload: PresignRequestSchema):
+    EXPIRATION = 60*60*24*365*100 # 100 year
+    key = payload.key
     try:
-        file = default_storage.open(file_name, "rb")
-        return FileResponse(file, as_attachment=True, filename=file_name)
+        url = generate_presigned_get_url(key, EXPIRATION)
+        return {"url": url}
     except Exception as e:
-        raise HttpError(500, f"Error reading file: {str(e)}")
+        raise HttpError(400, str(e))

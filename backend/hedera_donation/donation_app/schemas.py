@@ -179,3 +179,13 @@ class AuthNonce(Schema):
         if not value or not value.strip():
             raise ValueError("wallet_address must not be empty")
         return value
+    
+class PresignRequestSchema(Schema):
+    key: str
+
+class PresignedPostSchema(Schema):
+    url: str
+    fields: dict
+
+class PresignedGetURLSchema(Schema):
+    url: str

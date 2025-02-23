@@ -10,7 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "default-secret-key")
 JWT_TOKEN_EXP_DAY = 1
-DOMAIN_MEDIA_ROOT =  os.environ.get("DOMAIN_MEDIA_ROOT", "http://localhost:8000/api/read-file")
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
@@ -96,3 +95,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = os.environ.get("CORS_ALLOW_ALL_ORIGINS", "True").lower() == "true"
+
+
+# S3 config
+ACCESS_KEY = os.environ.get("ACCESS_KEY", "")
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
+ENDPOINT_URL = os.environ.get("ENDPOINT_URL", "")
+BUCKET_NAME = os.environ.get("BUCKET_NAME", "")
+REGION_NAME = os.environ.get("REGION_NAME", "us-east-1")
