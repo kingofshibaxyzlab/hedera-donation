@@ -1,11 +1,11 @@
 import boto3
 from django.conf import settings
 
-ACCESS_KEY = settings.ACCESS_KEY
-SECRET_KEY = settings.SECRET_KEY
-ENDPOINT_URL = settings.ENDPOINT_URL
-BUCKET_NAME = settings.BUCKET_NAME
-REGION_NAME = settings.REGION_NAME
+ACCESS_KEY = settings.S3_ACCESS_KEY
+SECRET_KEY = settings.S3_SECRET_KEY
+ENDPOINT_URL = settings.S3_ENDPOINT_URL
+BUCKET_NAME = settings.S3_BUCKET_NAME
+REGION_NAME = settings.S3_REGION_NAME
 
 
 s3 = boto3.client(
