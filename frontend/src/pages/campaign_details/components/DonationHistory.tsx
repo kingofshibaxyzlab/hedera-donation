@@ -1,7 +1,10 @@
 import DataLoader from "@/components/DataLoader";
 import Spinner from "@/components/spinner/Spinner";
 import env from "@/env";
-import { useDonationHistoryByCampaign } from "@/services/apis/core";
+import {
+  ICampaignDonationHistory,
+  useDonationHistoryByCampaign,
+} from "@/services/apis/core";
 import { shortenTransactionHash } from "@/utils/transaction_string";
 import { formatDistanceToNow } from "date-fns";
 import { ethers } from "ethers";
@@ -102,64 +105,68 @@ const DonationHistory: React.FC<DonationHistoryProps> = ({
                   </p>
                 }
               >
-                {allDonations.map((donation, index) => (
-                  <div
-                    key={index}
-                    className="p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
-                  >
-                    <img
-                      src={
-                        donation.user_image || "https://placehold.co/100x100"
-                      }
-                      alt={donation.campaign_title}
-                      className="w-20 h-20 object-cover rounded-md border"
-                    />
-                    <div className="flex-1">
-                      <p
-                        className="text-xl font-semibold text-blue-800 cursor-pointer"
-                        onClick={() =>
-                          navigate(
-                            `${env.EXPLORER_SCAN}/campaign/${donation.campaign_id}`
-                          )
+                {allDonations.map(
+                  (donation: ICampaignDonationHistory, index) => (
+                    <div
+                      key={index}
+                      className="p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
+                    >
+                      <img
+                        src={
+                          donation.user_image || "https://placehold.co/100x100"
                         }
-                      >
-                        {donation.campaign_title}
-                      </p>
-                      <p className="text-gray-700">
-                        Amount:{" "}
-                        {donation &&
-                          ethers.formatUnits(
-                            donation.amount.toString(),
-                            Number(donation?.token?.decimal || 0)
-                          )}{" "}
-                        {tokenSymbol}
-                      </p>
-                      <p className="text-gray-500 text-sm">
-                        Donated:{" "}
-                        {donation.date
-                          ? formatDistanceToNow(new Date(donation.date), {
-                              addSuffix: true,
-                            })
-                          : "Unknown time ago"}
-                      </p>
-                      <p className="text-gray-500 text-sm">
-                        Transaction Hash:{" "}
-                        {donation.transaction_hash ? (
-                          <a
-                            className="text-green-600 hover:underline"
-                            href={`${env.EXPLORER_SCAN}/transaction/${donation.transaction_hash}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {shortenTransactionHash(donation.transaction_hash)}
-                          </a>
-                        ) : (
-                          "Unknown"
-                        )}
-                      </p>
+                        alt={donation.user_image}
+                        className="w-20 h-20 object-cover rounded-md border"
+                      />
+                      <div className="flex-1">
+                        <p
+                          className="text-xl font-semibold text-blue-800 cursor-pointer"
+                          onClick={() =>
+                            navigate(
+                              `${env.EXPLORER_SCAN}/campaign/${donation.campaign_id}`
+                            )
+                          }
+                        >
+                          {donation.user_name}
+                        </p>
+                        <p className="text-gray-700">
+                          Amount:{" "}
+                          {donation &&
+                            ethers.formatUnits(
+                              donation.amount.toString(),
+                              Number(donation?.token?.decimal || 0)
+                            )}{" "}
+                          {tokenSymbol}
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          Donated:{" "}
+                          {donation.date
+                            ? formatDistanceToNow(new Date(donation.date), {
+                                addSuffix: true,
+                              })
+                            : "Unknown time ago"}
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          Transaction Hash:{" "}
+                          {donation.transaction_hash ? (
+                            <a
+                              className="text-green-600 hover:underline"
+                              href={`${env.EXPLORER_SCAN}/transaction/${donation.transaction_hash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {shortenTransactionHash(
+                                donation.transaction_hash
+                              )}
+                            </a>
+                          ) : (
+                            "Unknown"
+                          )}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </InfiniteScroll>
             ) : (
               !isHistoryLoading && (
