@@ -2,6 +2,7 @@ from math import ceil
 import uuid
 import os
 from typing import List
+from django.db import connection
 
 from donation_app.helper import (
     generate_jwt_token,
@@ -46,6 +47,39 @@ api = NinjaAPI()
 
 CACHE_TIMEOUT = 5
 
+import os
+from django.db import connection
+from ninja import NinjaAPI
+from ninja.errors import HttpError
+
+api = NinjaAPI()
+
+# Check health API
+@api.get("/health", tags=["Health Check"])
+def health_check(request):
+    checks = {}
+    overall_status = "ok"
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            result = cursor.fetchone()
+            if result is None or result[0] != 1:
+                raise Exception("Database check failed")
+        checks["database"] = {"status": "ok"}
+    except Exception as e:
+        checks["database"] = {"status": "fail", "message": str(e)}
+        overall_status = "fail"
+    response = {
+        "status": overall_status,
+        "checks": checks
+    }
+
+    if overall_status != "ok":
+        raise HttpError(503, response)
+
+    return response
+
+    
 # Authentication APIs
 @api.post("/auth/login", tags=["Authentication"], response=LoginResponseSchema)
 def login(request, payload: LoginSchema):
