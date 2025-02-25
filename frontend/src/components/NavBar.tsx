@@ -73,8 +73,8 @@ const NavigationBar = () => {
         >
           {[
             { label: "Home", path: UrlMapping.home },
+            { label: "Campaigns", path: UrlMapping.all_campaign },
             { label: "Info", path: UrlMapping.info },
-            { label: "All Campaigns", path: UrlMapping.all_campaign },
             { label: "How to Use", path: UrlMapping.how_to_use },
             { label: "Faucet", path: UrlMapping.faucet },
           ].map(({ label, path }) => (

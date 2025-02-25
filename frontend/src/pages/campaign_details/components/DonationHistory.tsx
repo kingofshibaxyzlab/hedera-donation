@@ -100,7 +100,7 @@ const DonationHistory: React.FC<DonationHistoryProps> = ({
                   </div>
                 }
                 endMessage={
-                  <p className="text-center text-gray-600 text-xl mt-3">
+                  <p className="text-center text-gray-600 text-base mt-3">
                     No more donations available.
                   </p>
                 }
@@ -109,7 +109,7 @@ const DonationHistory: React.FC<DonationHistoryProps> = ({
                   (donation: ICampaignDonationHistory, index) => (
                     <div
                       key={index}
-                      className="p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
+                      className="p-2 md:p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
                     >
                       <img
                         src={
@@ -170,7 +170,9 @@ const DonationHistory: React.FC<DonationHistoryProps> = ({
               </InfiniteScroll>
             ) : (
               !isHistoryLoading && (
-                <p className="text-center text-gray-600">No donations yet.</p>
+                <p className="text-center text-gray-600 text-base mt-3">
+                  No donations yet.
+                </p>
               )
             )}
           </div>

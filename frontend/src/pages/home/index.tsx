@@ -36,10 +36,11 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto text-center relative z-10 px-4">
           <div className="bg-green-600 bg-opacity-60 rounded-xl inline-block px-6 sm:px-10 py-6 sm:py-8 shadow-lg mt-10 md:mt-20">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight">
-              Support Campaigns with Tokens
+              Power Change with Crypto Giving
             </h2>
             <p className="mt-4 text-sm sm:text-lg md:text-xl">
-              Explore top campaigns and make an impact with your donations.
+              Donate securely, support causes, and make a lasting impact with
+              blockchain.
             </p>
             {!isAuthenticated && (
               <button
@@ -74,7 +75,7 @@ const HomePage: React.FC = () => {
                 </section>
               ) : (
                 !isCampaignsLoading && (
-                  <p className="text-center text-gray-600">
+                  <p className="text-center text-gray-600 text-base mt-3">
                     No campaigns available. Please check back later!
                   </p>
                 )
@@ -128,7 +129,7 @@ const HomePage: React.FC = () => {
                 </div>
               ) : (
                 !isDonorsLoading && (
-                  <div className="text-center text-gray-600">
+                  <div className="text-center text-gray-600 text-base mt-3">
                     No donors yet. Be the first to donate!
                   </div>
                 )

@@ -47,7 +47,7 @@ const AllCampaignsPage: React.FC = () => {
       <div className="min-h-[80vh]">
         <main className="container mx-auto py-16 px-6 md:px-20">
           <h2 className="text-3xl font-bold text-blue-800 mb-12 text-center">
-            All Campaigns
+            Campaigns
           </h2>
           {error ? (
             <p className="text-center text-red-600 text-xl mb-4">
@@ -69,7 +69,7 @@ const AllCampaignsPage: React.FC = () => {
                     </div>
                   }
                   endMessage={
-                    <p className="text-center text-gray-600 text-xl mt-3">
+                    <p className="text-center text-gray-600 text-base mt-3">
                       {hasNext
                         ? "Scroll down to load more."
                         : "No more campaigns available."}
@@ -89,7 +89,7 @@ const AllCampaignsPage: React.FC = () => {
                 </InfiniteScroll>
               ) : (
                 !isLoading && (
-                  <p className="text-center text-gray-600 text-xl">
+                  <p className="text-center text-gray-600 text-base mt-3">
                     No campaigns available.
                   </p>
                 )

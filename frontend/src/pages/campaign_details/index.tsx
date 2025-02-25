@@ -109,7 +109,7 @@ const CampaignDetailsPage: React.FC = () => {
         loadingMessage="Loading campaign..."
         minHeight={800}
       >
-        <main className="container mx-auto py-16 px-6 md:px-20 flex-1">
+        <main className="container mx-auto py-16 px-1 md:px-20 flex-1">
           {/* Campaign Title Section */}
           <section className="text-center mb-12">
             <div className="flex flex-col md:flex-row items-center justify-between">
@@ -136,12 +136,12 @@ const CampaignDetailsPage: React.FC = () => {
             <img
               src={campaign?.image || "https://placehold.co/150x150"}
               alt="Campaign"
-              className="w-full max-h-[80vh] rounded-2xl object-cover shadow-xl border p-4 bg-white"
+              className="w-full max-h-[80vh] rounded-2xl object-cover shadow-xl border p-2 md:p-4 bg-white"
             />
           </div>
 
           {/* Campaign Details */}
-          <section className="bg-white rounded-2xl p-10 shadow-xl mb-16">
+          <section className="bg-white rounded-2xl p-2 md:p-8 shadow-xl mb-16">
             <h3 className="text-xl font-bold text-blue-800 mb-2">Summary</h3>
             <p className="text-xl text-gray-800 leading-relaxed mb-8">
               {campaign?.summary}
@@ -308,9 +308,10 @@ const CampaignDetailsPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
                 <input
                   type="number"
+                  min={0}
                   value={donationAmount}
                   onChange={(e) => setDonationAmount(Number(e.target.value))}
-                  className="w-60 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full md:w-80 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                   placeholder="Enter amount"
                 />
                 <button
@@ -331,9 +332,12 @@ const CampaignDetailsPage: React.FC = () => {
                   {loading ? "Processing..." : "Donate"}
                 </button>
               </div>
+              <nav className="text-center md:text-start text-sm text-yellow-600 mb-6 animate-pulse">
+                Please check your wallet if you are using a phone to connect.
+              </nav>
               {donationAmount <= 0 && (
                 <p className="text-red-500 mt-2">
-                  Please set a valid donation amount.
+                  * Please set a valid donation amount.
                 </p>
               )}
               {(error || errorCheckAndApproveToken) && (
@@ -363,7 +367,7 @@ const CampaignDetailsPage: React.FC = () => {
           </section>
 
           {/* Donation History Section */}
-          <section className="bg-white rounded-2xl p-8 shadow-xl mb-16">
+          <section className="bg-white rounded-2xl p-2 md:p-8 shadow-xl mb-16">
             <h3 className="text-xl font-bold text-blue-800 mb-2">
               Donation History
             </h3>
@@ -373,7 +377,7 @@ const CampaignDetailsPage: React.FC = () => {
                 tokenSymbol={campaign.token.symbol}
               />
             ) : (
-              <p className="text-center text-gray-600">
+              <p className="text-center text-gray-600 text-base mt-3">
                 Donation history not available.
               </p>
             )}

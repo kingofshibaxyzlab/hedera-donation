@@ -106,6 +106,11 @@ const LoginPage: React.FC = () => {
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
         )}
+
+        <nav className="space-x-2 text-center text-sm text-yellow-600 mb-6 animate-pulse">
+          Please check your wallet if you are using a phone to connect.
+        </nav>
+
         {walletAddress && isNonceLoading && (
           <Spinner message="Loading account ..." />
         )}

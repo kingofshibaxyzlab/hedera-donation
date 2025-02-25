@@ -114,7 +114,7 @@ const HowToUsePage: React.FC = () => {
           </h3>
           <ol className="list-decimal list-inside text-gray-700">
             <li>
-              Click on the <strong>"All Campaigns"</strong> button to browse the
+              Click on the <strong>"Campaigns"</strong> button to browse the
               list of available campaigns.
             </li>
             <li>
