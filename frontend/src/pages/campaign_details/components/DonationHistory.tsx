@@ -109,14 +109,14 @@ const DonationHistory: React.FC<DonationHistoryProps> = ({
                   (donation: ICampaignDonationHistory, index) => (
                     <div
                       key={index}
-                      className="p-2 md:p-4 border rounded-xl flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
+                      className="p-2 md:p-4 border rounded-lg flex items-center space-x-6 bg-white hover:bg-gray-50 transition-all duration-300 mt-4 min-w-fit"
                     >
                       <img
                         src={
                           donation.user_image || "https://placehold.co/100x100"
                         }
                         alt={donation.user_image}
-                        className="w-20 h-20 object-cover rounded-md border"
+                        className="w-20 h-20 object-cover rounded-lg border"
                       />
                       <div className="flex-1">
                         <p

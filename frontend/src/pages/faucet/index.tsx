@@ -73,7 +73,7 @@ const FaucetTokenPage: React.FC = () => {
           Faucet Token
         </h2>
 
-        <section className="bg-white p-10 rounded-xl shadow-lg mb-16">
+        <section className="bg-white p-10 rounded-lg shadow-lg mb-16">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
             Mint Your Tokens
           </h3>

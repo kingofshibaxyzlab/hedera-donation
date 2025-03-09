@@ -76,7 +76,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 via-gray-50 to-blue-50">
-      <div className="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md">
+      <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-extrabold text-blue-800 mb-6 text-center">
           Welcome Back!
         </h2>
@@ -85,7 +85,7 @@ const LoginPage: React.FC = () => {
         </p>
         <button
           onClick={connectToWallet}
-          className={`w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold shadow-md ${
+          className={`w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold shadow-lg ${
             walletAddress
               ? "bg-green-600 hover:bg-green-700"
               : "hover:bg-blue-700"
@@ -98,7 +98,7 @@ const LoginPage: React.FC = () => {
         {walletAddress && dataNonce && !isNonceLoading && (
           <button
             onClick={handleLogin}
-            className={`w-full bg-yellow-500 text-blue-800 py-3 px-6 rounded-lg font-semibold shadow-md hover:bg-yellow-600 transition duration-300 ${
+            className={`w-full bg-yellow-500 text-blue-800 py-3 px-6 rounded-lg font-semibold shadow-lg hover:bg-yellow-600 transition duration-300 ${
               isLoggingIn && "opacity-70 cursor-not-allowed"
             }`}
             disabled={isLoggingIn}

@@ -136,12 +136,12 @@ const CampaignDetailsPage: React.FC = () => {
             <img
               src={campaign?.image || "https://placehold.co/150x150"}
               alt="Campaign"
-              className="w-full max-h-[80vh] rounded-2xl object-cover shadow-xl border p-2 md:p-4 bg-white"
+              className="w-full max-h-[80vh] rounded-lg object-cover shadow-lg border p-2 md:p-4 bg-white"
             />
           </div>
 
           {/* Campaign Details */}
-          <section className="bg-white rounded-2xl p-2 md:p-8 shadow-xl mb-16">
+          <section className="bg-white rounded-lg p-2 md:p-8 shadow-lg mb-16">
             <h3 className="text-xl font-bold text-blue-800 mb-2">Summary</h3>
             <p className="text-xl text-gray-800 leading-relaxed mb-8">
               {campaign?.summary}
@@ -321,7 +321,7 @@ const CampaignDetailsPage: React.FC = () => {
                     donationAmount <= 0 ||
                     campaign?.status === CampaignStatus.CLOSED
                   }
-                  className={`py-3 px-8 rounded-full font-semibold text-lg shadow-md transition-colors duration-300 ${
+                  className={`py-3 px-8 rounded-full font-semibold text-lg shadow-lg transition-colors duration-300 ${
                     loading ||
                     donationAmount <= 0 ||
                     campaign?.status === CampaignStatus.CLOSED
@@ -367,7 +367,7 @@ const CampaignDetailsPage: React.FC = () => {
           </section>
 
           {/* Donation History Section */}
-          <section className="bg-white rounded-2xl p-2 md:p-8 shadow-xl mb-16">
+          <section className="bg-white rounded-lg p-2 md:p-8 shadow-lg mb-16">
             <h3 className="text-xl font-bold text-blue-800 mb-2">
               Donation History
             </h3>

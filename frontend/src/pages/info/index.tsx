@@ -11,7 +11,7 @@ const InfoPage: React.FC = () => {
           About ShibaAngels
         </h2>
 
-        <section className="bg-white p-10 rounded-xl shadow-lg mb-16">
+        <section className="bg-white p-10 rounded-lg shadow-lg mb-16">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">Our Mission</h3>
           <p className="text-lg text-gray-700 leading-relaxed mb-10">
             At ShibaAngels, our mission is to revolutionize the way people

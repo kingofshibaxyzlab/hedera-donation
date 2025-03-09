@@ -37,7 +37,7 @@ const MyCampaignTab: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-3xl shadow-2xl">
+    <div className="bg-white mx-auto py-16 px-6 md:px-20 rounded-3xl shadow-lg">
       <h2 className="text-2xl font-extrabold text-blue-800 mb-6 text-center">
         My Campaigns
       </h2>
@@ -56,21 +56,21 @@ const MyCampaignTab: React.FC = () => {
               <div
                 key={Number(campaign.id)}
                 onClick={() => handleNavigate(Number(campaign.id))}
-                className="p-6 border rounded-lg shadow-lg bg-gray-50 hover:bg-white transition ease-in-out duration-300 cursor-pointer"
+                className="p-4 border rounded-lg shadow-lg bg-gray-50 cursor-pointer transition transform hover:shadow-xl"
               >
-                <div className="flex items-center space-x-6">
+                <div className="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-4 sm:space-y-0">
                   <img
                     src={campaign.image || "https://placehold.co/150x150"}
                     alt={campaign.title}
-                    className="w-24 h-24 object-cover rounded-lg"
+                    className="w-full md:w-24 md:h-24 object-cover rounded-lg"
                   />
-                  <div className="flex-1">
+                  <div className="flex-1 w-full">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-bold text-blue-700">
                         {campaign.title}
                       </h3>
                       <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass(
+                        className={`mt-2 sm:mt-0 px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass(
                           campaign.status || ""
                         )}`}
                       >
@@ -81,13 +81,13 @@ const MyCampaignTab: React.FC = () => {
                       Goal:{" "}
                       {campaign?.current_amount &&
                         ethers.formatUnits(
-                          campaign?.current_amount.toString(),
+                          campaign.current_amount.toString(),
                           Number(campaign?.token?.decimal)
                         )}{" "}
                       /{" "}
                       {campaign?.goal &&
                         ethers.formatUnits(
-                          campaign?.goal.toString(),
+                          campaign.goal.toString(),
                           Number(campaign?.token?.decimal)
                         )}{" "}
                       {campaign.token?.symbol || "Unknown"}
@@ -101,8 +101,8 @@ const MyCampaignTab: React.FC = () => {
                     <p className="text-sm text-gray-600 mt-1">
                       {campaign.progress}% funded
                     </p>
-                    <div className="flex mt-3">
-                      <nav className="text-yellow-600 mt-3 mr-10">
+                    <div className="flex flex-col sm:flex-row sm:justify-between mt-3">
+                      <nav className="text-yellow-600 text-sm">
                         Created at:{" "}
                         {campaign.created_at
                           ? `${formatDistanceToNow(
@@ -113,7 +113,7 @@ const MyCampaignTab: React.FC = () => {
                             )}`
                           : "Unknown time ago"}
                       </nav>
-                      <nav className="text-yellow-600 mt-3">
+                      <nav className="text-yellow-600 text-sm mt-2 sm:mt-0">
                         Updated at:{" "}
                         {campaign.updated_at
                           ? `${formatDistanceToNow(
@@ -130,7 +130,7 @@ const MyCampaignTab: React.FC = () => {
                     onClick={(e) =>
                       handleWithdrawFunds(e, Number(campaign.onchain_id))
                     }
-                    className={`py-2 px-4 rounded-full text-white transition-all duration-300 ${
+                    className={`mt-4 sm:mt-0 py-2 px-4 rounded-full text-white transition-all duration-300 ${
                       loading || campaign.status === CampaignStatus.CLOSED
                         ? "bg-yellow-400 cursor-not-allowed"
                         : "bg-yellow-500 hover:bg-yellow-600"
@@ -148,7 +148,7 @@ const MyCampaignTab: React.FC = () => {
                 {success &&
                   transactionHash &&
                   Number(campaign.onchain_id) === currentCampaignId && (
-                    <nav>
+                    <nav className="mt-4">
                       <a
                         className="text-green-600 hover:underline"
                         href={`${env.EXPLORER_SCAN}/transaction/${transactionHash}`}

@@ -104,7 +104,7 @@ const CreateCampaignPage: React.FC = () => {
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <NavigationBar />
       <div className="flex justify-center items-center flex-1 py-16 px-6">
-        <div className="bg-white p-10 rounded-xl shadow-lg w-full max-w-3xl">
+        <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-3xl">
           <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">
             Create a Campaign
           </h2>
@@ -116,7 +116,7 @@ const CreateCampaignPage: React.FC = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Enter campaign title"
                 {...register("title", {
                   required: "Campaign title is required",
@@ -133,7 +133,7 @@ const CreateCampaignPage: React.FC = () => {
                 Type
               </label>
               <select
-                className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("campaign_type_id", {
                   required: "Campaign type is required",
                 })}
@@ -161,7 +161,7 @@ const CreateCampaignPage: React.FC = () => {
                 Summary
               </label>
               <textarea
-                className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Provide a short summary of your campaign"
                 rows={3}
                 {...register("summary", {
@@ -202,7 +202,7 @@ const CreateCampaignPage: React.FC = () => {
               <div className="flex items-center mt-2 space-x-4">
                 {/* Token Type Selector */}
                 <select
-                  className="w-1/3 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-1/3 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                   {...register("token_id", {
                     required: "Token type is required",
                   })}
@@ -220,7 +220,7 @@ const CreateCampaignPage: React.FC = () => {
                 {/* Goal Amount */}
                 <input
                   type="number"
-                  className="w-2/3 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-2/3 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                   placeholder="Enter goal amount"
                   {...register("goal", { required: "Goal amount is required" })}
                 />
@@ -240,7 +240,7 @@ const CreateCampaignPage: React.FC = () => {
               </label>
               <input
                 type="file"
-                className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
@@ -254,7 +254,7 @@ const CreateCampaignPage: React.FC = () => {
                     Uploading...
                   </h4>
                   <div className="animate-pulse flex flex-col space-y-4">
-                    <div className="h-48 bg-gray-200 rounded-md"></div>
+                    <div className="h-48 bg-gray-200 rounded-lg"></div>
                   </div>
                 </div>
               ) : (
@@ -266,7 +266,7 @@ const CreateCampaignPage: React.FC = () => {
                     <img
                       src={uploadedImage}
                       alt="Uploaded Preview"
-                      className="w-full h-auto rounded-md shadow-md mt-2"
+                      className="w-full h-auto rounded-lg shadow-lg mt-2"
                     />
                   </div>
                 )
@@ -280,7 +280,7 @@ const CreateCampaignPage: React.FC = () => {
               </label>
               <input
                 type="url"
-                className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Enter YouTube or Vimeo link"
                 {...register("video_link")}
               />
@@ -293,7 +293,7 @@ const CreateCampaignPage: React.FC = () => {
               </label>
               <input
                 type="url"
-                className="w-full mt-2 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Enter link to the project website"
                 {...register("project_url")}
               />
@@ -309,7 +309,7 @@ const CreateCampaignPage: React.FC = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-yellow-400 text-blue-800 py-3 px-6 rounded-full font-semibold shadow-md hover:bg-yellow-500 hover:shadow-lg transition-all duration-300 mt-8"
+              className="w-full bg-yellow-400 text-blue-800 py-3 px-6 rounded-full font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300 mt-8"
               disabled={isPending}
             >
               {isPending ? "Submitting..." : "Submit Campaign"}

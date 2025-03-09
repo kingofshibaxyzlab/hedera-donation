@@ -36,7 +36,7 @@ const Message = (props: any) => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel
-                className={`relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all p-4`}
+                className={`relative transform overflow-hidden rounded-lg bg-white text-center shadow-lg transition-all p-4`}
               >
                 <div className="max-w-md max-h-full overflow-auto p-4">
                   <div className="text-sm text-start">{props.children}</div>

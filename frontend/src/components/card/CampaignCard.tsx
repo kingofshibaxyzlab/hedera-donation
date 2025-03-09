@@ -30,7 +30,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition duration-300 flex flex-col">
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300 flex flex-col">
       <img
         src={campaign.image || "https://placehold.co/150x150"}
         alt={campaign.title}
@@ -76,14 +76,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           {onViewCampaign ? (
             <button
               onClick={handleViewCampaign}
-              className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300"
+              className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300"
             >
               View Campaign
             </button>
           ) : (
             <Link
               to={`${UrlMapping.campaign_detail}/${campaign.id}`}
-              className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300"
+              className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300"
             >
               View Campaign
             </Link>

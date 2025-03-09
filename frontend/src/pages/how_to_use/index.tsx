@@ -12,7 +12,7 @@ const HowToUsePage: React.FC = () => {
         </h2>
 
         {/* Getting Started Section */}
-        <section className="bg-white p-10 rounded-xl shadow-lg mb-16">
+        <section className="bg-white p-10 rounded-lg shadow-lg mb-16">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
             Getting Started
           </h3>
@@ -71,7 +71,7 @@ const HowToUsePage: React.FC = () => {
         </section>
 
         {/* Creating a Campaign Section */}
-        <section className="bg-white p-10 rounded-xl shadow-lg mb-16">
+        <section className="bg-white p-10 rounded-lg shadow-lg mb-16">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
             Creating a Campaign
           </h3>
@@ -108,7 +108,7 @@ const HowToUsePage: React.FC = () => {
         </section>
 
         {/* Donating to a Campaign Section */}
-        <section className="bg-white p-10 rounded-xl shadow-lg mb-16">
+        <section className="bg-white p-10 rounded-lg shadow-lg mb-16">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
             Donating to a Campaign
           </h3>
@@ -133,7 +133,7 @@ const HowToUsePage: React.FC = () => {
         </section>
 
         {/* Tracking Donations Section */}
-        <section className="bg-white p-10 rounded-xl shadow-lg">
+        <section className="bg-white p-10 rounded-lg shadow-lg">
           <h3 className="text-3xl font-bold text-blue-700 mb-6">
             Tracking Your Campaigns
           </h3>

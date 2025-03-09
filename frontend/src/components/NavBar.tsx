@@ -36,7 +36,7 @@ const NavigationBar = () => {
 
   return (
     <header
-      className={`bg-gradient-to-r from-indigo-600 to-blue-500 shadow-md fixed w-full top-0 z-50 overflow-hidden${
+      className={`bg-gradient-to-r from-indigo-600 to-blue-500 shadow-lg fixed w-full top-0 z-50 overflow-hidden${
         isScrolled ? "scrolled" : ""
       }`}
       style={{ position: "sticky", top: 0 }}
@@ -49,7 +49,7 @@ const NavigationBar = () => {
             <img
               src={DonationLogo}
               alt="Logo"
-              className="w-12 h-12 rounded-full shadow-md"
+              className="w-12 h-12 rounded-full shadow-lg"
             />
             <h1 className="text-2xl font-bold text-white tracking-wide">
               ShibaAngels
@@ -114,17 +114,15 @@ const NavigationBar = () => {
                 <img
                   src={userImage}
                   alt="User Icon"
-                  className="size-12 rounded-full border-2 border-white shadow-md min-h-12 min-w-12"
+                  className="size-12 rounded-full border-2 border-white shadow-lg min-h-12 min-w-12"
                 />
-                <span className="text-white font-medium hidden sm:inline-block">
-                  {walletAddress}
-                </span>
+                <span className="text-white font-medium">{walletAddress}</span>
               </div>
 
               {/* Disconnect Button */}
               <button
                 onClick={handleDisconnect}
-                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full font-medium shadow-lg transition duration-300 w-full lg:w-auto text-center min-w-fit"
+                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full font-medium hover:shadow-xl transition duration-300 w-full lg:w-auto text-center min-w-fit"
               >
                 Disconnect
               </button>
@@ -132,7 +130,7 @@ const NavigationBar = () => {
           ) : (
             <button
               onClick={handleLoginClick}
-              className="bg-yellow-400 text-blue-800 py-2 px-5 rounded-full font-medium shadow-md hover:bg-yellow-500 transition duration-300 w-full lg:w-auto text-center"
+              className="bg-yellow-400 text-blue-800 py-2 px-5 rounded-full font-medium shadow-lg hover:bg-yellow-500 transition duration-300 w-full lg:w-auto text-center"
             >
               Connect Wallet
             </button>

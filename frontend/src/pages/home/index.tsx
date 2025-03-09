@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
         }}
       >
         <div className="container mx-auto text-center relative z-10 px-4">
-          <div className="bg-green-600 bg-opacity-60 rounded-xl inline-block px-6 sm:px-10 py-6 sm:py-8 shadow-lg mt-10 md:mt-20">
+          <div className="bg-green-600 bg-opacity-60 rounded-lg inline-block px-6 sm:px-10 py-6 sm:py-8 shadow-lg mt-10 md:mt-20">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight">
               Power Change with Crypto Giving
             </h2>
@@ -107,7 +107,7 @@ const HomePage: React.FC = () => {
                   {topDonors.map((donor) => (
                     <div
                       key={donor.id}
-                      className="bg-white rounded-xl shadow-md p-6 flex items-center space-x-6 hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out min-w-fit"
+                      className="bg-white rounded-lg shadow-lg p-6 flex items-center space-x-6 hover:shadow-xl transition-transform duration-300 ease-in-out min-w-fit"
                     >
                       <div className="w-16 h-16 flex-shrink-0 rounded-full bg-yellow-500 text-white flex items-center justify-center font-bold text-xl shadow">
                         {donor.initials}

@@ -10,7 +10,7 @@ const UserInfoPage: React.FC = () => {
   return (
     <div className="bg-gradient-to-b from-blue-50 to-gray-50 min-h-screen">
       <NavigationBar />
-      <div className="container mx-auto max-w-6xl p-6 mt-10">
+      <div className="container max-w-6xl mx-auto py-16 px-1 md:px-20">
         <div className="flex justify-center mb-8">
           <button
             className={`px-6 py-3 rounded-t-lg font-semibold focus:outline-none mx-1 ${

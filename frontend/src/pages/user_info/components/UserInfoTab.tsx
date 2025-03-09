@@ -90,7 +90,7 @@ const UserInfoTab: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-3xl shadow-2xl">
+    <div className="bg-white p-6 rounded-3xl shadow-lg">
       <DataLoader
         isLoading={isUserLoading}
         loadingMessage="Loading user info..."
@@ -129,7 +129,7 @@ const UserInfoTab: React.FC = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-sm"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
                 placeholder="Enter your name"
               />
             </div>
@@ -143,7 +143,7 @@ const UserInfoTab: React.FC = () => {
                 name="walletAddress"
                 value={formData.walletAddress}
                 readOnly
-                className="w-full mt-2 px-4 py-3 border rounded-lg bg-gray-100 focus:outline-none shadow-sm"
+                className="w-full mt-2 px-4 py-3 border rounded-lg bg-gray-100 focus:outline-none shadow-lg"
               />
             </div>
 
@@ -156,7 +156,7 @@ const UserInfoTab: React.FC = () => {
                 name="facebook"
                 value={formData.facebook}
                 onChange={handleInputChange}
-                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-sm"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
                 placeholder="Enter your Facebook profile URL"
               />
             </div>
@@ -170,7 +170,7 @@ const UserInfoTab: React.FC = () => {
                 name="twitter"
                 value={formData.twitter}
                 onChange={handleInputChange}
-                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-sm"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
                 placeholder="Enter your Twitter profile URL"
               />
             </div>
@@ -183,7 +183,7 @@ const UserInfoTab: React.FC = () => {
                 name="bio"
                 value={formData.bio}
                 onChange={handleInputChange}
-                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-sm"
+                className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
                 rows={4}
                 placeholder="Write a short bio about yourself"
               ></textarea>
